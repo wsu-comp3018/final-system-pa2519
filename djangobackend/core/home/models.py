@@ -42,4 +42,33 @@ class Cases(models.Model):
     date_opened=models.DateField
     date_closed=models.DateField
     status=models.TextField()
-    Interviewee_id=models.TextField(null=True, blank=True)
+    interviewee_id=models.IntegerField()
+
+class Audits(models.Model):
+    EVENT_CREATED="CREATED"
+    EVENT_UPDATED="UPDATED"
+    EVENT_DELETED="DELETED"
+    EVENT_CHOICES=[
+        (EVENT_CREATED, "created"),
+        (EVENT_UPDATED, "updated"), 
+        (EVENT_DELETED, "deleted"),
+    ]
+
+    id=models.IntegerField()
+    auditable_type=models.TextField()
+    auditable_id=models.IntegerField()
+    user_id=models.IntegerField()
+    updated_content=models.TextField(null=True, blank=True)
+    event=models.CharField(choices=EVENT_CHOICES, default=EVENT_CREATED)
+    old_value=models.TextField()
+    new_value=models.TextField()
+    
+class Statements(models.Model):
+    id=models.IntegerField()
+    case_id=models.IntegerField()
+    user_id=models.IntegerField()
+    interviewee_id=models.IntegerField()
+    audio_id=models.IntegerField()
+    audio_transcript=models.TextField(null=True, blank=True)
+    updated_content=models.TextField(null=True, blank=True)
+
