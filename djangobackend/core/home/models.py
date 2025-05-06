@@ -34,11 +34,12 @@ class Interviewees(models.Model):
     phone_no=PhoneNumberField()
     language_pref=models.TextField(null=True, blank=True)
 
-class Interviewees(models.Model):
+class Cases(models.Model):
     id=models.IntegerField()
     case_number=models.IntegerField()
-    =models.CharField(max_length=250)
-    email=models.CharField(max_length=250)
-    DOB=models.DateField
-    phone_no=PhoneNumberField()
-    language_pref=models.TextField(null=True, blank=True)
+    case_type=models.TextField()
+    user_id=models.IntegerField()
+    date_opened=models.DateField
+    date_closed=models.DateField
+    status=models.TextField()
+    Interviewee_id=models.TextField(null=True, blank=True)
