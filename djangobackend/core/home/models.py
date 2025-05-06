@@ -1,7 +1,7 @@
 from django.db import models
 import enum
 from django import forms
-from phonenumber_field.modelfields import PhoneNumberField
+# from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
 class Users(models.Model):
@@ -15,7 +15,7 @@ class Users(models.Model):
         (ROLE_LEGAL_TEAM, "Legal Team"),
     ]
 
-    id=models.IntegerField()
+    id=models.IntegerField(primary_key=True)
     first_name=models.CharField(max_length=250)
     last_name=models.CharField(max_length=250)
     email=models.CharField(max_length=250)
@@ -26,16 +26,16 @@ class Users(models.Model):
     password=models.CharField(max_length=128)
 
 class Interviewees(models.Model):
-    id=models.IntegerField()
+    id=models.IntegerField(primary_key=True)
     first_name=models.CharField(max_length=250)
     last_name=models.CharField(max_length=250)
     email=models.CharField(max_length=250)
     DOB=models.DateField
-    phone_no=PhoneNumberField()
+    phone_no=models.CharField(max_length=15)
     language_pref=models.TextField(null=True, blank=True)
 
 class Cases(models.Model):
-    id=models.IntegerField()
+    id=models.IntegerField(primary_key=True)
     case_number=models.IntegerField()
     case_type=models.TextField()
     user_id=models.IntegerField()
@@ -54,7 +54,7 @@ class Audits(models.Model):
         (EVENT_DELETED, "deleted"),
     ]
 
-    id=models.IntegerField()
+    id=models.IntegerField(primary_key=True)
     auditable_type=models.TextField()
     auditable_id=models.IntegerField()
     user_id=models.IntegerField()
@@ -64,7 +64,7 @@ class Audits(models.Model):
     new_value=models.TextField()
     
 class Statements(models.Model):
-    id=models.IntegerField()
+    id=models.IntegerField(primary_key=True)
     case_id=models.IntegerField()
     user_id=models.IntegerField()
     interviewee_id=models.IntegerField()
@@ -73,7 +73,7 @@ class Statements(models.Model):
     updated_content=models.TextField(null=True, blank=True)
 
 class Sessions(models.Model):
-         id = models.IntegerField()
+         id = models.IntegerField(primary_key=True)
          case_id = models.IntegerField()
          user_id = models.IntegerField()
          interviewee_id = models.IntegerField()
@@ -82,10 +82,10 @@ class Sessions(models.Model):
          session_date = models.DateField
  
 class AudioRecordings(models.Model):
-    id = models.IntegerField()
+    id = models.IntegerField(primary_key=True)
     session_id = models.IntegerField()
     statement_id = models.IntegerField()
-    audio_name = models.CharField(max_length(250))
+    audio_name = models.CharField(max_length=250)
     length = models.DurationField()
     size = models.IntegerField()
     audio_transcript = models.TextField(blank=True, null=True)
@@ -93,7 +93,7 @@ class AudioRecordings(models.Model):
     # audio_path=models.TextField(blank=True, null=True)
  
 class StatementTemplates(models.Model):
-    id = models.IntegerField()
+    id = models.IntegerField(primary_key=True)
     slug = models.SlugField(unique=True, max_length=250)
     name = models.CharField(max_length=250)
 
