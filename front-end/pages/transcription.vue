@@ -154,7 +154,7 @@
         <div class="flex justify-center gap-3 text-[30px] mx-3">
             <div class="grow p-2 bg-[#222222] space-x-6 content-center rounded-xl">
                 <button class="bg-red-600 p-2 rounded-xl" @click="enableMicrophone()">REC</button>
-                <button @click="toggleUploadMenu">Upload Templates</button>
+                <button @click="toggleUploadMenu">Upload</button>
                  
             </div>
             <div class="p-4 bg-[#222222] rounded-xl">
@@ -177,7 +177,7 @@
             <h1 class="text-[20px]">Upload a template</h1>
             <form method="post" enctype="">
                 <input ref="fileInput" @change="getFiles" type="file" multiple name="template" id="template" class="hidden">
-                <button type="button" class="bg-red-500 w-full py-2" @click="openFileInputWindow">Upload</button>
+                <button type="button" class="bg-blue-500 w-full py-2" @click="openFileInputWindow">Upload</button>
             </form>
             
             <p class="pt-2">Chosen files will be displayed here:</p>

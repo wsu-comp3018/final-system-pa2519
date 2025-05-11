@@ -22,7 +22,7 @@
         <div class="flex justify-center gap-6">
             <div class="relative h-[580px] w-full border-2 border-red-500 rounded-xl bg-white p-4 overflow-hidden">
                 <p ref="editableText" class="text-black h-full overflow-y-auto outline-none">What is this?</p>
-                <button @click="toggleEdit('false')" class="bg-[#222222] absolute bottom-3 right-3 px-3 py-2">Save</button>
+                <button  @click="toggleEdit('false')" class="bg-[#222222] absolute bottom-3 right-3 px-3 py-2">Save</button>
             </div>
 
             <div class="bg-white border-2 border-red-500 h-fit flex flex-col py-6 m-auto">
