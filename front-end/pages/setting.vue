@@ -1,6 +1,13 @@
 <style scoped>
     button {
-        @apply p-2 text-left hover:bg-gray-800 w-full rounded-lg
+        padding: 8px;
+        text-align: left;
+        width: 100%;
+        border-radius: 8px;
+    }
+
+    button:hover {
+        background-color: #1f2937;
     }
 </style>
 
