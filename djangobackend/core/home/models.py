@@ -22,7 +22,7 @@ class Users(models.Model):
     email=models.CharField(max_length=250)
     DOB=models.DateField
     # INVESTIGATOR- Investigator, INSURER- Insurer, LEGAL TEAM - Legal Team
-    role=models.CharField(choices=ROLE_CHOICES, default=ROLE_INVESTIGATOR)
+    role=models.CharField(choices=ROLE_CHOICES, default=ROLE_INVESTIGATOR, max_length=100)
     organisation=models.CharField(max_length=250, null=True, blank=True)
     password=models.CharField(max_length=128)
 
@@ -60,7 +60,7 @@ class Audits(models.Model):
     auditable_id=models.IntegerField()
     user_id=models.IntegerField()
     updated_content=models.TextField(null=True, blank=True)
-    event=models.CharField(choices=EVENT_CHOICES, default=EVENT_CREATED)
+    event=models.CharField(choices=EVENT_CHOICES, default=EVENT_CREATED, max_length=100)
     old_value=models.TextField()
     new_value=models.TextField()
     

@@ -94,17 +94,18 @@ DATABASES = {
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASS'),
         'HOST': '127.0.0.1',
-        'PORT': '3307',
+        'PORT': '3306',
         'OPTIONS':{
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
         }
-
-DB_NAME=mydatabase
-DB_USER=myuser
-DB_PASSWORD=mysecret
-DB_HOST=127.0.0.1
-DB_PORT=3306
     }
+
+# DB_NAME=mydatabase
+# DB_USER=myuser
+# DB_PASSWORD=mysecret
+# DB_HOST=127.0.0.1
+# DB_PORT=3306
+#     }
 }
 
 
@@ -153,3 +154,15 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:8000",
 ]
+
+#email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # SMTP server host
+EMAIL_PORT = 587  # SMTP server port (587 for TLS, 465 for SSL)
+EMAIL_USE_TLS = True  # True for TLS, False for SSL
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER')  # SMTP server username
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')  # SMTP server password
+EMAIL_USE_SSL = False  # Set to True if using SSL
+
+#to use Custom User model
+AUTH_USER_MODEL='accounts.User'
