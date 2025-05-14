@@ -44,7 +44,7 @@ INSTALLED_APPS = [
 ]
 
 EXTERNAL_APPS ={
-    'accounts',
+    'signup',
     'home'
 }
 
@@ -90,13 +90,14 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
+        'NAME': 'mydatabase',
+        'USER': 'myuser',
+        'PASSWORD': 'mysecret',
         'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'PORT': '3307',
         'OPTIONS':{
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+            # 'init_command': "SET SESSION sql_mode='STRICT_TRANS_TABLES'"
         }
     }
 
@@ -155,14 +156,14 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
 ]
 
-#email configuration
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # SMTP server host
-EMAIL_PORT = 587  # SMTP server port (587 for TLS, 465 for SSL)
-EMAIL_USE_TLS = True  # True for TLS, False for SSL
-EMAIL_HOST_USER = os.environ.get('EMAIL_USER')  # SMTP server username
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')  # SMTP server password
-EMAIL_USE_SSL = False  # Set to True if using SSL
+# #email configuration
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'  # SMTP server host
+# EMAIL_PORT = 587  # SMTP server port (587 for TLS, 465 for SSL)
+# EMAIL_USE_TLS = True  # True for TLS, False for SSL
+# EMAIL_HOST_USER = os.environ.get('EMAIL_USER')  # SMTP server username
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')  # SMTP server password
+# EMAIL_USE_SSL = False  # Set to True if using SSL
 
-#to use Custom User model
-AUTH_USER_MODEL='accounts.User'
+# #to use Custom User model
+# AUTH_USER_MODEL='accounts.User'
