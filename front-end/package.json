@@ -11,12 +11,15 @@
   },
   "dependencies": {
     "@nuxt/icon": "^1.11.0",
+    "axios": "^1.9.0",
+    "js-cookie": "^3.0.5",
     "nuxt": "^3.16.2",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
     "@iconify-json/iconamoon": "^1.2.2",
+    "@nuxt/types": "^2.18.1",
     "@nuxtjs/tailwindcss": "^6.13.2"
   }
 }

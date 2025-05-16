@@ -31,7 +31,18 @@
 </style>
 
 <script setup>
-    
+
+import ExampleComponent from '~/components/ExampleComponent.vue';
+    const { $api } = useNuxtApp();
+    const handleSignup = () => {
+        $api.get("signup").then((resp) => {
+            console.log(resp)
+    })
+    .catch((err) => {
+        console.log(err)
+    })
+    }
+
     const form = reactive({
         input: {
             fname: '',
@@ -138,7 +149,7 @@
                     <input type="password" v-model="form.input.confirm_pass" id="password" name="password" placeholder="Password" @input="validate_ConfirmPass">
                     <span>{{ form.error.confirm_pass }}</span>
 
-                    <input type="submit" value="Sign Up" class="cursor-pointer">
+                    <button @click="handleSignup" class="cursor-pointer">Sign Up</button> 
                 </form>
 
                 <!--<span v-if="error.fname" class="text-white">{{ error.fname }}</span>-->
