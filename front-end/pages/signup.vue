@@ -32,15 +32,14 @@
 
 <script setup>
 
-import ExampleComponent from '~/components/ExampleComponent.vue';
     const { $api } = useNuxtApp();
     const handleSignup = () => {
         $api.get("signup").then((resp) => {
             console.log(resp)
-    })
-    .catch((err) => {
-        console.log(err)
-    })
+        })
+        .catch((err) => {
+            console.log(err)
+        })
     }
 
     const form = reactive({
@@ -61,7 +60,7 @@ import ExampleComponent from '~/components/ExampleComponent.vue';
         }
     })
 
-    function validate_FirstName() {
+    const validate_FirstName = () => {
         if (form.input.fname === '') {
             form.error.fname = 'Required';
         } else {
@@ -69,7 +68,7 @@ import ExampleComponent from '~/components/ExampleComponent.vue';
         }
     }
 
-    function validate_LastName() {
+    const validate_LastName = () => {
         if (form.input.lname === '') {
             form.error.lname = 'Required';
         } else {
@@ -78,7 +77,7 @@ import ExampleComponent from '~/components/ExampleComponent.vue';
     }
 
     var email_Regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-    function validate_Email() {
+    const validate_Email = () => {
         if (form.input.email === '') {
             form.error.email = 'Required';
         } else {
@@ -91,7 +90,7 @@ import ExampleComponent from '~/components/ExampleComponent.vue';
         }
     }
 
-    function validate_Password() {
+    const validate_Password = () => {
         if (form.input.password === '') {
             form.error.password = 'Required';
         } else {
@@ -99,7 +98,7 @@ import ExampleComponent from '~/components/ExampleComponent.vue';
         }
     }
 
-    function validate_ConfirmPass() {
+    const validate_ConfirmPass = () => {
         if (form.input.password !== form.input.confirm_pass) {
             form.error.confirm_pass = 'This password does not match';
         } else {
@@ -107,9 +106,16 @@ import ExampleComponent from '~/components/ExampleComponent.vue';
         }
     }
 
-    function formValidation() {
-        if (form.input.fname === '') {
-            form.error.fname === 'Required';
+    // ignore for now
+    const formValidation = () => {
+        validate_FirstName();
+        validate_LastName();
+        validate_Email();
+        validate_Password();
+        validate_ConfirmPass();
+
+        if (error.fname || error.lname || error.email || error.password || error.confirm_pass) {
+            return;
         }
     }
     
@@ -124,7 +130,7 @@ import ExampleComponent from '~/components/ExampleComponent.vue';
             <div class="p-10">
                 <h1 class="text-center text-[35px]"><b>Create Your Account</b></h1>
 
-                <form id="signup-form" method="post" action="" @submit.prevent="formValidation">
+                <form id="signup-form" method="post" action="" >
                     <div class="flex justify-center gap-10">
                         <div class="flex-1">
                             <label for="fname">FIRST NAME *</label>

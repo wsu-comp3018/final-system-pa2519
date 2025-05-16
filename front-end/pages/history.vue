@@ -1,4 +1,5 @@
 <script setup>
+    // test data, please ignore
     const items = ref([
         {
             interviewee_fname: "John",
@@ -25,11 +26,11 @@
     const caseTypes = ref([]);
     const filterListOpen = ref(false);
 
-    function openFilterList() {
+    const openFilterList = () => {
         filterListOpen.value = !filterListOpen.value;
     }
 
-    function filterCases() {
+    const filterCases = () => {
         filterList.value = [];
         if (caseTypes.value.length > 0) {
             if (searchFilterList.value.length > 0) {
@@ -56,7 +57,7 @@
 
     }
 
-    function search() {
+    const search = () => {
         // at the beginning, check for filter if set, then filter array
         if (query.value !== '') {
             searchFilterList.value = [];

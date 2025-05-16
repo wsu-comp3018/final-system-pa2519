@@ -42,7 +42,7 @@
     })
 
     var email_Regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-    function validate_Email() {
+    const validate_Email = () => {
         if (form.input.email === '') {
             form.error.email = 'Required';
         } else {
@@ -55,7 +55,7 @@
         }
     }
 
-    function validate_Password() {
+    const validate_Password = () => {
         if (form.input.password === '') {
             form.error.password = 'Required';
         } else {

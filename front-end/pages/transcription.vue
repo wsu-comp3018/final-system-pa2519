@@ -1,29 +1,27 @@
 <script setup>
+
     let sidebarIsOpen = ref(false);
-    function toggleSidebar() {
+    const toggleSidebar = () => {
         sidebarIsOpen.value = !sidebarIsOpen.value;
     } 
 
-    let uploadMenu = ref(false);
-    function toggleUploadMenu() {
-        if (uploadMenu.value == true){
-            files.value = [];
-        }
 
+    let uploadMenu = ref(false);
+    const toggleUploadMenu = () => {
         uploadMenu.value = !uploadMenu.value;
     }
 
     const inputFile = useTemplateRef('fileInput');
-    function openFileInputWindow() {
+    const openFileInputWindow = () => {
         inputFile.value.click();
     }
 
     var files = ref([]);
-    function getFiles(e) {
+    const getFiles = (e) => {
         files.value = Array.from(e.target.files);
     }
 
-    function removeFile(index) {
+    const removeFile = (index) => {
         const dt = new DataTransfer;
 
         files.value.forEach((file, i) => {
@@ -44,7 +42,7 @@
     let fullRecorder = null;
     let chunkRecorder = null;
 
-    function Setup(){
+    function Setup() {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices
                 .getUserMedia({
@@ -83,7 +81,8 @@
 
     
     var intervalID;
-    function enableMicrophone() {
+
+    function enableMicrophone () {
         if (!recordingStatus) return;
 
         recordingEnabled.value = !recordingEnabled.value;
@@ -91,6 +90,7 @@
         if (recordingEnabled.value) {
             fullRecorder.start();
             chunkRecorder.start();
+            
 
             intervalID = setInterval(() => {
                     chunkRecorder.stop();
@@ -113,6 +113,7 @@
 
         console.log("Requesting");
         try{
+            // will need to replace later
             const response = await $fetch("http://127.0.0.1:8000/transcription/transcribe/", {
                 method: "POST", 
                 body: formData, 
@@ -136,7 +137,7 @@
 <template>
     <div class="flex flex-col h-full w-5/6 mx-auto">
 
-        <!--Temporary Icon-->
+        <!--Temporary Icon. Opens sidebar-->
         <Icon class="cursor-pointer absolute left-0 top-[50%] rotate-90" size="25px" name="iconamoon:menu-burger-horizontal-bold" @click="toggleSidebar"/>
 
         <div class="flex justify-center py-5 h-5/6 text-black">
@@ -152,9 +153,9 @@
         </div>
             
         <div class="flex justify-center gap-3 text-[30px] mx-3">
-            <div class="grow p-2 bg-[#222222] space-x-6 content-center rounded-xl">
-                <button class="bg-red-600 p-2 rounded-xl" @click="enableMicrophone()">REC</button>
-                <button @click="toggleUploadMenu">Upload</button>
+            <div class="flex items-center p-4 bg-[#222222] space-x-6 rounded-xl">
+                <Icon size="37px" class="cursor-pointer" :style="{color: mic}" name="fluent:mic-record-20-regular" @click="enableMicrophone"/>
+                <Icon size="37px" class="cursor-pointer" name="material-symbols:upload-file-outline" @click="toggleUploadMenu"/>
                  
             </div>
             <div class="p-4 bg-[#222222] rounded-xl">
@@ -165,10 +166,12 @@
 
     </div>
 
+
     <div v-if="sidebarIsOpen" class="z-10 w-full absolute bg-[rgba(0,0,0,0.8)] text-white">
         <Icon class="absolute right-0 m-5 mt-3 cursor-pointer" size="50px" name="gridicons:cross" @click="toggleSidebar"/>
         <Sidebar/>
     </div>
+
 
     <div v-if="uploadMenu" class="absolute z-10 bg-[rgba(0,0,0,0.8)] text-white w-full h-full">
         <div class="p-5 bg-white text-black w-[300px] rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
