@@ -1,13 +1,13 @@
-# from rest_framework import serializers
-# from accounts.models import User
+from rest_framework import serializers
+from signup.models import Users
 
-# class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
 #     password=serializers.CharField(write_only=True)
 #     confirm_password=serializers.CharField(write_only=True)
 
-#     class Meta:
-#         model=User
-#         fields=["first_name","last_name","email","password","confirm_password"]
+    class Meta:
+        model=Users
+        fields=["first_name","last_name","email","password"]
 
 #     def validate(self,attrs):
 #         password=attrs.get('password')

@@ -1,5 +1,13 @@
-# from django.shortcuts import render
-# from home.models import Users
+from django.shortcuts import render
+from .models import Users
+from rest_framework.generics import ListAPIView
+from .serializers import UserSerializer
+from rest_framework.response import Response
+from rest_framework import status, authentication, permissions
 
-# users = Users.objects.get(id=1)
-# print(Users.first_name, Users.last_name, Users.user.email, Users.user.password)  # Access imported fields
+class UsersList(ListAPIView):
+    def get(self,request,format=None):
+        users=Users.objects.all()
+        serializer=UserSerializer(Users)
+
+        return Response(serializer.data)
