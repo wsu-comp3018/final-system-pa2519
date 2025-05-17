@@ -42,7 +42,7 @@ export default defineNuxtPlugin(() => {
     const api: AxiosInstance = axios.create({
         baseURL: BASE_URL,
         headers: {
-            Authorization: `Bearer ${getKey(false)}`,
+            Authorization: `Bearer ${getKey()}`,
             'X-Requested-With': 'XMLHttpRequest',
             Accept: 'application/json',
         },
