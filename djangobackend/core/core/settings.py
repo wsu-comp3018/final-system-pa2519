@@ -39,9 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    # 'rest_framework_simplejwt',
     'rest_framework.authtoken',
     'corsheaders',
     'djoser',
+    # 'dj_rest_auth',
+
 ]
 
 EXTERNAL_APPS ={
@@ -60,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # "allauth.account.middleware.AccountMiddleware"
     # 'corsheaders.middleware.CorsMiddleware'
 ]
 
@@ -152,9 +156,16 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-REST_FRAMEWORK={
-    'DEFAULT_RENDERED_CLASSES':('rest_framework.renderers.JSONRenderer',),
-}
+# REST_FRAMEWORK={
+#     # 'DEFAULT_RENDERED_CLASSES':('rest_framework.renderers.JSONRenderer',
+#     "DEFAULT_AUTHENTICATION_CLASSES": {
+#         "rest_framework_simplejwt.authentication.JWTAuthentication",
+
+#     },
+#     "DEFAULT_PERMISSION_CLASSES": {
+#         "rest_framework.permissions.IsAuthenticated",
+#     }
+# }
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
@@ -175,3 +186,9 @@ CORS_ALLOWED_ORIGINS = [
 
 ###########################
 USER_CREATE_PASSWORD_RETYPE=False
+
+REST_AUTH={
+    'USE_JWT': True,
+    'JWT_AUTH_COOKIE': 'djangojwtauth_cookie',
+    'JWT_AUTH_REFRESH_COOKIE': 'djangojwtauth_refresh_cookie'
+}
