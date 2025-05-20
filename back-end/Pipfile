@@ -5,8 +5,10 @@ name = "pypi"
 
 [packages]
 django = "*"
+djangorestframework = "*"
 django-cors-headers = "*"
-openai-whisper = {git = "https://github.com/openai/whisper.git"}
+djangorestframework-simplejwt = "*"
+argon2-cffi = "*"
 
 [dev-packages]
 

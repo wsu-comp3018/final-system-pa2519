@@ -9,9 +9,8 @@
 
             <nav class="flex justify-end items-center text-[20px] gap-5">
                 <button><NuxtLink>About</NuxtLink></button>
-                <button><NuxtLink to="/history">History</NuxtLink></button>
-                <button><NuxtLink to="/transcription">Record</NuxtLink></button>
-                <button class="inline-block w-12 h-12 text-center border-2 border-white rounded-full"><NuxtLink>JM</NuxtLink></button>       
+                <button><NuxtLink to="/login">Login</NuxtLink></button> 
+
             </nav>
         </div>
         

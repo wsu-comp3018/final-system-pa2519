@@ -1,4 +1,8 @@
 <script setup>
+    definePageMeta({
+        layout: 'logged-in'
+    })
+
     // test data, please ignore
     const items = ref([
         {

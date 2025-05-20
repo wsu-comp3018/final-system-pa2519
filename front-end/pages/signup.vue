@@ -33,14 +33,6 @@
 <script setup>
 
     const { $api } = useNuxtApp();
-    const handleSignup = () => {
-        $api.get("signup").then((resp) => {
-            console.log(resp)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-    }
 
     const form = reactive({
         input: {
@@ -106,7 +98,7 @@
         }
     }
 
-    // ignore for now
+    const createError = ref(false);
     const formValidation = () => {
         validate_FirstName();
         validate_LastName();
@@ -114,9 +106,43 @@
         validate_Password();
         validate_ConfirmPass();
 
-        if (error.fname || error.lname || error.email || error.password || error.confirm_pass) {
+        console.log(form.input.fname);
+
+        if (form.error.fname || form.error.lname || form.error.email || form.error.password || form.error.confirm_pass) {
             return;
         }
+
+        $api.post('http://localhost:8000/api/createAccount/', {
+            fname: form.input.fname,
+            lname: form.input.lname,
+            email: form.input.email,
+            password: form.input.password,
+        })
+        .then((response) => {
+            console.log(response);
+            if (response.status == 201) {
+                navigateTo('/login');
+            }
+        })
+        .catch((error) => {
+            createError.value = true;
+            setTimeout(() => {
+                createError.value = false;
+            }, 3000);
+            console.log("Error: ", error);
+        })
+    }
+
+    const test = () => {
+        $api.post('http://localhost:8000/api/test/', {
+            fname: 'bruh',
+        })
+        .then((response) => {
+            console.log(response)
+        })
+        .catch((error) => {
+            console.log('Error:', error)
+        })
     }
     
 </script>
@@ -130,7 +156,8 @@
             <div class="p-10">
                 <h1 class="text-center text-[35px]"><b>Create Your Account</b></h1>
 
-                <form id="signup-form" method="post" action="" >
+                <form @submit.prevent="formValidation">
+
                     <div class="flex justify-center gap-10">
                         <div class="flex-1">
                             <label for="fname">FIRST NAME *</label>
@@ -151,14 +178,16 @@
                     <input type="password" v-model="form.input.password" id="password" name="password" placeholder="Password" @blur="validate_Password">
                     <span>{{ form.error.password }}</span>
 
-                    <label for="password">CONFIRM PASSWORD *</label>
-                    <input type="password" v-model="form.input.confirm_pass" id="password" name="password" placeholder="Password" @input="validate_ConfirmPass">
+                    <label for="confirm_pass">CONFIRM PASSWORD *</label>
+                    <input type="password" v-model="form.input.confirm_pass" id="confirm_pass" name="password" placeholder="Password" @input="validate_ConfirmPass">
                     <span>{{ form.error.confirm_pass }}</span>
 
-                    <button @click="handleSignup" class="cursor-pointer">Sign Up</button> 
+                    <p v-if="createError" class="text-center pt-3"><span>An account already exists for this email</span></p>
+
+                    <input type="submit" value="Sign Up" class="cursor-pointer">
                 </form>
 
-                <!--<span v-if="error.fname" class="text-white">{{ error.fname }}</span>-->
+                <p class="text-center pt-4">Have an account? <NuxtLink to="/login" class="hover:underline">Login</NuxtLink></p>
             </div>
 
         </div>

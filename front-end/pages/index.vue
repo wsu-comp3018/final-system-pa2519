@@ -1,4 +1,8 @@
-<template><!---->
+<script setup>
+
+</script>
+
+<template>
     
     <div class="h-full p-8">
         

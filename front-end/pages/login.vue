@@ -5,7 +5,6 @@
         width: 100%;
         height: 40px;
         background-color: black;
-        margin-bottom: 16px;
         margin-top: 8px;
         padding: 24px 0 24px 0;
         text-indent: 16px;
@@ -13,7 +12,6 @@
 
     input[type="password"]{
         margin: 8px 0 8px 0;
-        
     }
 
     input[type="submit"]{
@@ -26,9 +24,26 @@
         border-radius: 9999px;
     }
 
+    label {
+        display: block;
+        margin-top:16px;
+    }
+
 </style>
 
 <script setup>
+    /*
+    Account 1:
+    ahhh@guh.com
+    test1234
+
+    Account 2:
+    samtam@email.com
+    sammy
+    */
+
+    const { $api } = useNuxtApp();
+
     const form = reactive({
         input: {
             email: '',
@@ -63,6 +78,33 @@
         }
     }
 
+    const formValidation = () => {
+        console.log("Function called");
+        validate_Email();
+        validate_Password();
+
+        if(form.error.password !== '' && form.error.email !== '') {
+            return;
+        }
+        $api.post("http://localhost:8000/api/login/", {
+            email: form.input.email,
+            password: form.input.password,
+        })
+        .then((response) => {
+            // get token and store as cookie
+            const token = useCookie('token', {
+                maxAge: 60
+            });
+            token.value = response.data.access;
+            navigateTo('/transcription')
+        })
+        .catch ((error) => {
+            console.log("Error occured: ", error)
+        })
+
+        
+    }
+
 </script>
 
 <template>
@@ -74,15 +116,17 @@
             <h2 class="text-center text-[35px]"><b>LOGIN</b></h2> 
 
             <div class="flex justify-center">
-                <form>
+                <form @submit.prevent="formValidation">
                     <label for="email">EMAIL</label>
-                    <input type="email" id="email" name="email" placeholder="Email" @blur="validate_Email">
+                    <input type="email" id="email" v-model="form.input.email" name="email" placeholder="Email" @blur="validate_Email">
+                    <span class="text-red-500">{{ form.error.email }}</span>
 
                     <label for="password">PASSWORD</label>
-                    <input type="password" id="password" name="password" placeholder="Password" @blur="validate_Password">
+                    <input type="password" id="password" v-model="form.input.password" name="password" placeholder="Password" @blur="validate_Password">
+                    <span class="text-red-500">{{ form.error.password }}</span>
                     <NuxtLink class="hover:underline ">Forgot Password?</NuxtLink>
 
-                    <input type="submit" value="Login">
+                    <input type="submit" value="Login" class="cursor-pointer">
                 </form>
             </div>
             <p class="text-center pt-4">Dont have a account? <NuxtLink to="/signup" class="hover:underline">Sign up here!</NuxtLink></p>

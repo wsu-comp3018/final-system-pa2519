@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class TranscriptionConfig(AppConfig):
+class ApiConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'transcription'
+    name = 'api'

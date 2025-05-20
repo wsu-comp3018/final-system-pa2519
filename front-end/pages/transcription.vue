@@ -1,5 +1,9 @@
 <script setup>
 
+    definePageMeta({
+        layout: 'logged-in'
+    })
+
     let sidebarIsOpen = ref(false);
     const toggleSidebar = () => {
         sidebarIsOpen.value = !sidebarIsOpen.value;
@@ -16,24 +20,33 @@
         inputFile.value.click();
     }
 
-    var files = ref([]);
-    const getFiles = (e) => {
-        files.value = Array.from(e.target.files);
+    var file = ref(null);
+    const getFile = (e) => {
+        file.value = e.target.files[0];
     }
 
-    const removeFile = (index) => {
-        const dt = new DataTransfer;
+    let fileError = ref("");
+    const fileSubmit = () => {
+        const { $api } = useNuxtApp();
+        fileError.value = "";
+        if (file.value.length === 0) {
+            fileError.value = "Please submit a file.";
+            return
+        } else {
+            
+            const template = new FormData();
+            template.append('template', file.value);
 
-        files.value.forEach((file, i) => {
-            if (i != index) {
-                dt.items.add(file);
-            }
-        })
-
-        inputFile.value.files = dt.files;
-
-        files.value = Array.from(inputFile.value.files);
-    } 
+            $api.post("http://localhost:8000/api/upload/template/", template)
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log("Error", error);
+            })
+        }
+   
+    }
 
     let recordingStatus = false;
     let recordingEnabled = ref(false);
@@ -54,6 +67,9 @@
 
                     fullRecorder.ondataavailable = (event) => {
                         fullRecording.push(event.data);
+                        const blob = new Blob(fullRecording, {type: "audio/wav"});
+                        fullRecording = [];
+                        sendFullAudioRecording(blob)
                     }
 
 
@@ -61,7 +77,7 @@
                         chunk.push(event.data);
                         const blob = new Blob(chunk, {type: "audio/wav"});
                         chunk = [];
-                        request_Transcription(blob);
+                        //request_Transcription(blob);
                     }
                     
                     fullRecorder.onstop = () => {
@@ -128,7 +144,20 @@
         } catch (error) {
             console.error(error.message);
         }
+    }
 
+    const sendFullAudioRecording = (audioBlob) => {
+        const fullAudio = new FormData();
+        fullAudio.append("fullAudio", audioBlob);
+
+        const { $api } = useNuxtApp();
+        $api.post("http://localhost:8000/api/upload/recording/", fullAudio)
+        .then ((response) => {
+            console.log(response);
+        })
+        .catch((error) => {
+            console.log("Error", error);
+        })
     }
     
 </script>
@@ -154,7 +183,7 @@
             
         <div class="flex justify-center gap-3 text-[30px] mx-3">
             <div class="flex items-center p-4 bg-[#222222] space-x-6 rounded-xl">
-                <Icon size="37px" class="cursor-pointer" :style="{color: mic}" name="fluent:mic-record-20-regular" @click="enableMicrophone"/>
+                <Icon size="37px" class="cursor-pointer" name="fluent:mic-record-20-regular" @click="enableMicrophone"/>
                 <Icon size="37px" class="cursor-pointer" name="material-symbols:upload-file-outline" @click="toggleUploadMenu"/>
                  
             </div>
@@ -178,18 +207,14 @@
             <Icon class="absolute right-0 top-0 mt-2 mr-2 cursor-pointer" size="20px" name="gridicons:cross" @click="toggleUploadMenu"/>
 
             <h1 class="text-[20px]">Upload a template</h1>
-            <form method="post" enctype="">
-                <input ref="fileInput" @change="getFiles" type="file" multiple name="template" id="template" class="hidden">
+            <form method="post" @submit.prevent="fileSubmit">
+                <input ref="fileInput" @change="getFile" type="file" name="template" id="template" class="hidden">
                 <button type="button" class="bg-blue-500 w-full py-2" @click="openFileInputWindow">Upload</button>
+                <span class="text-red-500">{{ fileError }}</span>
+                <p class="pt-2">Chosen file: <span v-if="file != null">{{ file.name }}</span></p>
+                <input type="submit" value="submit" class="cursor-pointer">
             </form>
-            
-            <p class="pt-2">Chosen files will be displayed here:</p>
-            <div v-for="(file, index) in files":key="index" class="pt-2">
-                <div class="flex">
-                    <span>{{ file.name }}</span>
-                    <span class="grow text-right cursor-pointer" @click="removeFile(index)">Delete</span>
-                </div>
-            </div>
+        
 
         </div>
     </div>

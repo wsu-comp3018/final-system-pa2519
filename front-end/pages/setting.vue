@@ -45,6 +45,12 @@
     }
 </style>
 
+<script setup>
+    definePageMeta({
+        layout: 'logged-in'
+    })
+</script>
+
 <template> 
 
     <div class="flex flex-col w-[700px] mx-auto my-10 bg-[#222222] rounded-xl h-fit">

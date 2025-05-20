@@ -21,7 +21,7 @@ export default defineNuxtPlugin(() => {
     let failedQueue: FailedRequest[] = []
 
     const getKey = (): string => {
-        return Cookie.get(INSTANCE_KEY) || ''
+        return Cookie.get('token') || ''
     }
 
     const processQueue = (error: any, token?: string) => {
