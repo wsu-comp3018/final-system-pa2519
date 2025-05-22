@@ -193,4 +193,5 @@ REST_AUTH={
     'JWT_AUTH_REFRESH_COOKIE': 'djangojwtauth_refresh_cookie'
 }
 
-MEDIA_DIR=BASE_DIR / 'media' #whatever user stores goes into 'media' directory
+MEDIA_URL='/media/' #whatever user stores goes into 'media' directory
+MEDIA_ROOT=BASE_DIR/'templates'
