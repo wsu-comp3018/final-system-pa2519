@@ -3,8 +3,13 @@ from .models import *
 from rest_framework.decorators import api_view, authentication_classes
 import argon2
 from rest_framework_simplejwt.tokens import RefreshToken
+import whisper
+from summariser.views import summaryFunction
+
 
 ph = argon2.PasswordHasher()
+model = whisper.load_model("base")
+
 # Create your views here.
 @api_view(['POST'])
 @authentication_classes([])
@@ -13,7 +18,7 @@ def createAccount(request):
     user_lname = request.data.get('lname')
     user_email = request.data.get('email')
     user_password = request.data.get('password')
-    print(user_fname, user_lname, user_email, user_password)
+    print(user_fname, user_lname, user_email)
     
     hash = ph.hash(user_password)
     print(hash)
@@ -25,7 +30,6 @@ def createAccount(request):
         user = Users(first_name=user_fname, last_name=user_lname, email=user_email, password=hash)
         user.save()
         return Response(status=201)
-
 
 
 @api_view(['POST'])
@@ -47,24 +51,93 @@ def loginUser(request):
             }, status=200)
     except:
         return Response(status=401)
+    
 
-# PLEASE IGNORE FOR NOW, WILL IMPLEMENT AT A LATER DATE
-# def transcribe(request):
-#     if (request.method == 'POST'): # Check request method is POST
-#         blob = request.FILES['audio'] # Get audio blob object from request
-#         tempAudioFile = 'chunk_audio.wav'
+@api_view(['POST'])
+def createSession(request):
+    session_Name = request.data.get('session_Name')
+    user = request.user.id
+    session = Sessions(user_id_id=user, session_name=session_Name)
+    try:
+        checkSessionExist = Sessions.objects.get(user_id_id=user, session_name=session_Name) 
+        return Response({'Error': 'Session name is not unique'}, status=403)
+    except:
+        session.save()
+        session_id = Sessions.objects.get(user_id_id=user, session_name=session_Name)
+        client_fname = request.data.get('fname')
+        client_lname = request.data.get('lname')
+        print('here2')
+        client = Interviewees(first_name=client_fname, last_name=client_lname, session_id_id=session_id.id)
+        client.save()
+        return Response(status=200)
 
-#         # write audio blob into a audio file
-#         with open(tempAudioFile, 'wb+') as destination:
-#             for chunk in blob.chunks():
-#                 destination.write(chunk)
+
+@api_view(['POST'])
+def deleteSession(request):
+    user = request.user.id
+    session_id = request.data.get('session_id')
+   
+    try:
+        session = Sessions.objects.get(user_id_id=user, id=session_id)
+        session.delete()
+    except:
+        return Response(status=401)
+    
+    return Response(status=200)
+
+
+@api_view(['GET'])
+def getSessionList(request):
+    user = request.user.id
+    sessionList = Sessions.objects.filter(user_id_id=user).values('id','session_name', 'transcription', 'summarisation')
+    print(sessionList)
+    return Response({'data': sessionList}, status=200)
+
+
+@api_view(['POST'])
+def getSummary(request):
+    user = request.user.id
+    session_id = request.data.get('session_id')
+
+    try:
+        session = Sessions.objects.get(id=session_id, user_id_id=user)
+        text = summaryFunction(session.transcription)
+        session.summarisation = text
+        session.save()
+        return Response({'Summary': text}, status=200)
+    except:
+        return Response(status=401)
+    
+
+
+@api_view(['POST'])
+def transcribe(request):
+    user = request.user.id
+    session_id = request.data.get('session_id')
+    blob = request.FILES['audio'] 
+    tempAudioFile = 'chunk_audio.wav'
+
+    # write audio blob into a audio file
+    with open(tempAudioFile, 'wb+') as destination:
+        for chunk in blob.chunks():
+            destination.write(chunk)
+    
+    # whisper transcription process
+    result = model.transcribe(tempAudioFile, condition_on_previous_text=False, word_timestamps=True, hallucination_silence_threshold=4, fp16=False, language="en")
+
+    print("Whisper:",result["text"])
+
+    try:
+        session = Sessions.objects.get(id=session_id, user_id_id=user)
+        if session.transcription is None:
+            session.transcription = result["text"]
+        else:
+            session.transcription += result["text"]
         
-#         # whisper transcription process
-#         print("Transcribing")
-#         model = whisper.load_model("base")
-#         result = model.transcribe(tempAudioFile, condition_on_previous_text=False, word_timestamps=True, hallucination_silence_threshold=4, fp16=False, language="en")
+        session.save()
+    except:
+        return Response(status=401)
 
-#         print("Whisper:", result["text"])
-
-#         return Response({transcription: result["text"]})
+    text = result["text"]
+    return Response({'transcription':text}, status=200)
         

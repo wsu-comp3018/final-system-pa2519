@@ -108,7 +108,7 @@
 
         console.log(form.input.fname);
 
-        if (form.error.fname || form.error.lname || form.error.email || form.error.password || form.error.confirm_pass) {
+        if (form.error.fname !== "" || form.error.lname !== "" || form.error.email !== "" || form.error.password !== "" || form.error.confirm_pass !== "") {
             return;
         }
 
@@ -127,21 +127,9 @@
         .catch((error) => {
             createError.value = true;
             setTimeout(() => {
-                createError.value = false;
+                loginError.value = false;
             }, 3000);
             console.log("Error: ", error);
-        })
-    }
-
-    const test = () => {
-        $api.post('http://localhost:8000/api/test/', {
-            fname: 'bruh',
-        })
-        .then((response) => {
-            console.log(response)
-        })
-        .catch((error) => {
-            console.log('Error:', error)
         })
     }
     

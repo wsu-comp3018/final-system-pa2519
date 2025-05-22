@@ -28,7 +28,7 @@
 <template>
 
         
-        <div class="p-4 grow w-1/5 h-dvh bg-[#222222] overflow-hidden">
+        <div class="p-4 bg-[#222222] overflow-hidden">
                 <div class="text-center font-bold text-[40px]">
                     <h1>Sessions</h1>
                 </div>

@@ -1,7 +1,5 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.exceptions import AuthenticationFailed
-import jwt
-from django.conf import settings
 from .models import Users
 
 class myJWTAuthentication(JWTAuthentication):

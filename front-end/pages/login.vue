@@ -29,6 +29,10 @@
         margin-top:16px;
     }
 
+    span {
+        color: red;
+    }
+
 </style>
 
 <script setup>
@@ -78,6 +82,7 @@
         }
     }
 
+    const loginError = ref(false);
     const formValidation = () => {
         console.log("Function called");
         validate_Email();
@@ -93,12 +98,16 @@
         .then((response) => {
             // get token and store as cookie
             const token = useCookie('token', {
-                maxAge: 60
+                maxAge: 60 * 60 * 2
             });
             token.value = response.data.access;
             navigateTo('/transcription')
         })
         .catch ((error) => {
+            loginError.value = true;
+            setTimeout(() => {
+                loginError.value = false;
+            }, 3000);
             console.log("Error occured: ", error)
         })
 
@@ -116,7 +125,7 @@
             <h2 class="text-center text-[35px]"><b>LOGIN</b></h2> 
 
             <div class="flex justify-center">
-                <form @submit.prevent="formValidation">
+                <form class="w-full" @submit.prevent="formValidation">
                     <label for="email">EMAIL</label>
                     <input type="email" id="email" v-model="form.input.email" name="email" placeholder="Email" @blur="validate_Email">
                     <span class="text-red-500">{{ form.error.email }}</span>
@@ -124,7 +133,9 @@
                     <label for="password">PASSWORD</label>
                     <input type="password" id="password" v-model="form.input.password" name="password" placeholder="Password" @blur="validate_Password">
                     <span class="text-red-500">{{ form.error.password }}</span>
-                    <NuxtLink class="hover:underline ">Forgot Password?</NuxtLink>
+                    <button><NuxtLink class="hover:underline ">Forgot Password?</NuxtLink></button>
+
+                    <p v-if="loginError" class="text-center pt-3"><span>Email or password is incorrect</span></p>
 
                     <input type="submit" value="Login" class="cursor-pointer">
                 </form>

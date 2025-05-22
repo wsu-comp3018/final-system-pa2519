@@ -3,6 +3,20 @@
     const dropdown = () => {
         showAccountOptions.value = !showAccountOptions.value
     }
+
+    const closePopups = (event) => {
+        if (showAccountOptions.value === true) {
+            if (event.key === 'Escape') {
+                showAccountOptions.value = false;
+            } 
+
+
+        }
+    }
+
+    onMounted(() => {
+        document.addEventListener('keydown', closePopups);
+    })
 </script>
 
 
@@ -18,7 +32,7 @@
                 <button><NuxtLink to="/history">History</NuxtLink></button>
                 <button><NuxtLink to="/transcription">Record</NuxtLink></button>
                 <div class="relative">
-                    <Icon class="flex cursor-pointer" size="35px" name="material-symbols:account-circle" @click="dropdown"/>
+                    <Icon class="flex cursor-pointer" size="35px" name="material-symbols:account-circle" @focusout="dropdown" @click="dropdown"/>
                     <div v-if="showAccountOptions" class="bg-[#555555] absolute -right-1 text-nowrap flex flex-col p-2 gap-2 text-[15px]">
                         <button><NuxtLink to="/setting">Account Settings</NuxtLink></button>
                         <button><NuxtLink to='/logout'>Logout</NuxtLink></button>
