@@ -102,6 +102,8 @@ def getSummary(request):
     try:
         session = Sessions.objects.get(id=session_id, user_id_id=user)
         text = summaryFunction(session.transcription)
+        if text is None: # if no transcription, it will stop execution
+            return Response(status=401)
         session.summarisation = text
         session.save()
         return Response({'Summary': text}, status=200)
