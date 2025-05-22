@@ -11,7 +11,7 @@ INTERVIEW DETAILS:
 
 Date: {{ date }}
 Time Commenced:	
-Method:	Face to Face/Telephone/Video Interview
+Method:	{{ method }}
 Location: {{ location }}
 Investigator:	Joshua Massoud (412333813)
 
