@@ -192,3 +192,5 @@ REST_AUTH={
     'JWT_AUTH_COOKIE': 'djangojwtauth_cookie',
     'JWT_AUTH_REFRESH_COOKIE': 'djangojwtauth_refresh_cookie'
 }
+
+MEDIA_DIR=BASE_DIR / 'media' #whatever user stores goes into 'media' directory

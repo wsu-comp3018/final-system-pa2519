@@ -1,3 +1,6 @@
 from django.shortcuts import render
+from uploadTemplates.forms import templateForm
 
-# Create your views here.
+def upload_form(request):
+    context={'form': templateForm()}
+    return render()
