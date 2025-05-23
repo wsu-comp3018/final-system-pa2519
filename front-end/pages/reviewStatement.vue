@@ -1,4 +1,8 @@
 <script setup>
+    definePageMeta({
+        layout: 'logged-in'
+    })
+
     const iconColor = ref("black");
     const enable = useTemplateRef("editableText");
     function toggleEdit(isEditable) {

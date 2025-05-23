@@ -5,8 +5,16 @@ name = "pypi"
 
 [packages]
 django = "*"
+djangorestframework = "*"
 django-cors-headers = "*"
+djangorestframework-simplejwt = "*"
+argon2-cffi = "*"
 openai-whisper = {git = "https://github.com/openai/whisper.git"}
+spark-nlp = "==5.5.3"
+pyspark = "*"
+numpy = "*"
+transformers = {extras = ["torch"], version = "*"}
+hf-xet = "*"
 
 [dev-packages]
 

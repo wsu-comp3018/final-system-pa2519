@@ -21,7 +21,7 @@ export default defineNuxtPlugin(() => {
     let failedQueue: FailedRequest[] = []
 
     const getKey = (): string => {
-        return Cookie.get(INSTANCE_KEY) || ''
+        return Cookie.get('token') || ''
     }
 
     const processQueue = (error: any, token?: string) => {
@@ -42,7 +42,7 @@ export default defineNuxtPlugin(() => {
     const api: AxiosInstance = axios.create({
         baseURL: BASE_URL,
         headers: {
-            Authorization: `Bearer ${getKey(false)}`,
+            Authorization: `Bearer ${getKey()}`,
             'X-Requested-With': 'XMLHttpRequest',
             Accept: 'application/json',
         },
