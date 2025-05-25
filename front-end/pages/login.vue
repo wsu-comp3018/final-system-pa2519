@@ -36,15 +36,6 @@
 </style>
 
 <script setup>
-    /*
-    Account 1:
-    ahhh@guh.com
-    test1234
-
-    Account 2:
-    samtam@email.com
-    sammy
-    */
 
     const { $api } = useNuxtApp();
 

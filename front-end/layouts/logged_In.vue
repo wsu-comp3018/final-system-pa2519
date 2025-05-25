@@ -29,7 +29,7 @@
 
             <nav class="flex justify-end items-center text-[20px] gap-5">
                 <button><NuxtLink>About</NuxtLink></button>
-                <button><NuxtLink to="/history">History</NuxtLink></button>
+                <button><NuxtLink to="/history">Statements</NuxtLink></button>
                 <button><NuxtLink to="/transcription">Record</NuxtLink></button>
                 <div class="relative">
                     <Icon class="flex cursor-pointer" size="35px" name="material-symbols:account-circle" @focusout="dropdown" @click="dropdown"/>
