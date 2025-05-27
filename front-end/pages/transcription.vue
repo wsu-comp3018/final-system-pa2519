@@ -36,6 +36,8 @@
     const transcription = ref("");
     const summaryPoints = ref([]);
     const { $api } = useNuxtApp();
+    const hideSummary = ref(false);
+    const generationButtonText = ref('Generate Statement');
 
 
     const closePopups = (event) => {
@@ -57,7 +59,7 @@
     
     const sessionList = ref([]);
     const getSessions = () => {
-        $api.get('http://localhost:8000/api/sessionList/')
+        $api.get('http://localhost:8000/api/session-list/', {withCredentials: true})
         .then((response) => {
             console.log(response.data.data);
             sessionList.value = response.data.data;
@@ -69,25 +71,32 @@
     getSessions();
     
     const callSummariser = () => {
+        hideSummary.value = true;
+
         $api.post('http://localhost:8000/api/summary/', {
             session_id: currentSessionID.value,
-        })
+        }, {withCredentials: true})
         .then ((response) => {
             console.log(response.data.summary);
-            summaryPoints.value = response.data.summary.match(/[^.!]+[.!]/g);
-            console.log("lines:", summaryPoints);
-
-            //summary.value = response.data.summary;
+            if (response.data.summary) {
+                summaryPoints.value = response.data.summary.match(/[^.!]+[.!]/g);
+            }
+            hideSummary.value = false;
 
             getSessions();
             
         })
         .catch((error) => {
+            errorMessage.value = "An error occur during summarisation."
+            displayErrorMessage();
             console.log(error);
+            hideSummary.value = false;
         })
     }
 
     const callStatementGenerator = () => {
+        generationButtonText.value = 'Generating...';
+
         if (transcription.value === '') {
             console.log("No transcription");
             return;
@@ -95,16 +104,20 @@
 
         $api.post('http://localhost:8000/api/generate/', {
             session_id: currentSessionID.value,
-        })
+        }, {withCredentials: true})
         .then (async (response) => {
             console.log(response.data.statement_id);
             const id = response.data.statement_id
             if (!id) {
                 return;
             }
+            generationButtonText.value = 'Generate Statement';
             await navigateTo(`/review/${id}`)
         })
         .catch((error) => {
+            generationButtonText.value = 'Generate Statement';
+            errorMessage.value = "An error occur during generation."
+            displayErrorMessage();
             console.log('Error', error);
         })
     }
@@ -116,11 +129,11 @@
             return;
         }
 
-        $api.post('http://localhost:8000/api/createSession/', {
+        $api.post('http://localhost:8000/api/create-session/', {
             fname: form.input.client_fname,
             lname: form.input.client_lname,
             session_name: form.input.session_Name,
-        })
+        }, {withCredentials: true})
         .then((response) => {
             console.log(response);
             if (response.status == 200) {
@@ -142,9 +155,9 @@
     }
 
     const deleteSession = (id) => {
-        $api.post('http://localhost:8000/api/deleteSession/', {
+        $api.post('http://localhost:8000/api/delete-session/', {
             session_id: id,
-        })
+        }, {withCredentials: true})
         .then((response) => {
             getSessions();
             currentSessionID.value = null;
@@ -192,6 +205,15 @@
         }
     }
 
+    const errorMessage = ref('');
+    const errorPopup = ref(false);
+    const displayErrorMessage = () => {
+        errorPopup.value = true;
+        setTimeout(() => {
+            errorPopup.value = false;
+        }, 3000);
+    }
+
     // Functions to open UI and upload templates NOTE: IGNORE FOR NOW.
     const inputFile = useTemplateRef('fileInput');
     const openFileInputWindow = () => {
@@ -213,7 +235,7 @@
             const template = new FormData();
             template.append('template', file.value);
 
-            $api.post("http://localhost:8000/api/upload/template/", template)
+            $api.post("http://localhost:8000/api/upload/template/", template, {withCredentials: true})
             .then((response) => {
                 console.log(response);
             })
@@ -305,7 +327,7 @@
 
         console.log("Requesting for ", currentSessionID.value);
         
-        $api.post('http://localhost:8000/api/transcribe/', formData)
+        $api.post('http://localhost:8000/api/transcribe/', formData, {withCredentials: true})
         .then((response) => {
             if (response.data.transcription != "") {
                 console.log(response.data);
@@ -314,6 +336,9 @@
             }
         })
         .catch((error) => {
+            enableMicrophone();
+            errorMessage.value = "An error occured during transcribing. Please try again."
+            displayErrorMessage();
             console.log(error);
         })
     }
@@ -340,7 +365,7 @@
         formData.append("session_id", currentSessionID.value);
         formData.append("audio_name", recordingName.name);
 
-        $api.post("http://localhost:8000/api/uploadRecording/", formData)
+        $api.post("http://localhost:8000/api/upload-recording/", formData, {withCredentials: true})
         .then ((response) => {
             console.log(response);
         })
@@ -419,7 +444,9 @@
 
                     <div class="w-full bg-white rounded-xl overflow-auto mx-3">
                         <h2 class="text-center bg-[#222222] text-white p-3 text-[20px]">Summary</h2>
-                        <!-- <p class="h-[calc(100%-54px)] px-2 overflow-y-auto overflow-hidden">{{ summary }}</p> -->
+                        <div v-if="hideSummary" class="h-[calc(100%-54px)] flex items-center justify-center">
+                            <p>Summarising please wait...</p>
+                        </div>
                         <div class="h-[calc(100%-54px)] overflow-y-auto overflow-hidden pr-2">
                             <ul class="list-disc list-outside pl-6">
                                 <li v-for="line in summaryPoints">{{ line }}</li>
@@ -438,7 +465,7 @@
                         <button @click="callSummariser">Summarise</button>
                     </div>
                     <div class="p-4 bg-[#222222] rounded-xl">
-                        <button @click="callStatementGenerator">Generate Statement</button>
+                        <button @click="callStatementGenerator">{{ generationButtonText }}</button>
                     </div>
                 </div>
             </div>
@@ -495,6 +522,12 @@
             <div class="flex justify-center gap-4 pt-3">
                 <button class="px-2 py-1 bg-gray-500" @click="confirmRecordingUpload('Yes')">Confirm</button>
             </div>
+        </div>
+    </div>
+
+    <div v-if="errorPopup" class="absolute z-10 bg-[rgba(0,0,0,0.8)] w-full h-full">
+        <div class="p-5 text-white w-[400px] rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+            <p>{{ errorMessage }}</p>
         </div>
     </div>
     

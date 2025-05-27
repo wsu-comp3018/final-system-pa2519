@@ -4,14 +4,14 @@ from .models import Users
 
 class myJWTAuthentication(JWTAuthentication):
     def authenticate(self, request):
-        auth_header = request.headers.get('Authorization')
-        if not auth_header:
+        auth = request.META['HTTP_AUTHORIZATION']
+        if not auth:
             return None
         
-        prefix, token = auth_header.split()
-        if prefix.lower() != 'bearer':
-                return None
+        get_Token = auth.split()
         
+        token = get_Token[1]
+
         try:
             validated_Token = self.get_validated_token(token)
         except AuthenticationFailed as e:

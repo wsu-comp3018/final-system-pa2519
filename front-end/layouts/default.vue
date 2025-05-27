@@ -10,7 +10,6 @@
             <nav class="flex justify-end items-center text-[20px] gap-5">
                 <button><NuxtLink>About</NuxtLink></button>
                 <button><NuxtLink to="/login">Login</NuxtLink></button> 
-
             </nav>
         </div>
         

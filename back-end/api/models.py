@@ -1,8 +1,9 @@
 from django.db import models
 from datetime import date
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
-class Users(models.Model):
+class Users(AbstractUser):
 
     ROLE_INVESTIGATOR="INVESTIGATOR"
     ROLE_INSURER="INSURER"

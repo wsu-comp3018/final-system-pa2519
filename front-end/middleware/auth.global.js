@@ -1,6 +1,6 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-    const isToken = useCookie('token');
-    if (!isToken.value && (to.path === '/' || to.path === '/signup' || to.path === '/login')) {
+    const isToken = useCookie('api_token');
+    if (!isToken.value && (to.path === '/' || to.path === '/signup' || to.path === '/login' || to.path === '/resetpassword')) {
         return;
     }
 

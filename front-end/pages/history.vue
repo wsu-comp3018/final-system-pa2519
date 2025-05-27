@@ -3,6 +3,13 @@
         layout: 'logged-in'
     })
 
+    const items = ref([{
+        session_title: 'sample',
+    },
+    {
+        session_title: 'sample-2'
+    }])
+
     const listOfStatements = ref([]);
     const searchFilterList = ref([]);
     const filterList = ref([]);
@@ -14,7 +21,7 @@
     const { $api } = useNuxtApp();
 
     const getStatementHistory = () => {
-        $api.get('http://localhost:8000/api/statementList')
+        $api.get('http://localhost:8000/api/statement-list', {withCredentials: true})
         .then((response) => {
             console.log(response);
             listOfStatements.value = response.data.list;
@@ -131,14 +138,23 @@
                 <div v-if="searchFilterList.length == 0" class="flex justify-center text-[20px]">
                     <p>Its empty here.</p>
                 </div>
-                <div v-for="item in searchFilterList">
+                <!-- <div v-for="item in searchFilterList">
                     <div class="flex mb-5 p-2 bg-gray-500">
                         <div>
                             <p class="text-[25px]">Statement for - {{ item.client_first_name }} {{ item.client_last_name }}</p>
-                            <!-- <p class="text-[20px]">{{ item.case_type }}</p> -->
                         </div>
                         <div class="grow self-end text-right">
                             <button class="bg-gray-800 px-4 py-1 text-[16px]" @click="redirectToStatement(item.statement_id)">Open</button>
+                        </div>
+                    </div>
+                </div> -->
+                <div v-for="item in items">
+                    <div class="flex mb-5 p-2 bg-gray-500">
+                        <div>
+                            <p class="text-[25px]">Statement for - {{ item.session_title }}</p>
+                        </div>
+                        <div class="grow self-end text-right">
+                            <button class="bg-gray-800 px-4 py-1 text-[16px]">Open</button>
                         </div>
                     </div>
                 </div>

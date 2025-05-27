@@ -11,15 +11,15 @@
 
     const getStatement = () => {
 
-        $api.post('http://localhost:8000/api/getStatement/', {
+        $api.post('http://localhost:8000/api/get-statement/', {
             statement_id: id,
-        })
+        }, {withCredentials: true})
         .then((response) => {
             statement_content.value = response.data.statement;
 
         })
         .catch(async (error) => {
-            await navigateTo('/transcription');
+            //await navigateTo('/transcription');
             console.log(error);
         })
     }
@@ -42,10 +42,10 @@
 
     const saveChanges = () => {
         const newStatement = enable.value.innerText;
-        $api.post('http://localhost:8000/api/updateStatement', {
+        $api.post('http://localhost:8000/api/update-statement', {
             statement_id: id,
             updated_statement: newStatement,
-        }) 
+        }, {withCredentials: true}) 
         .then((response) => {
             console.log(response);
         })
@@ -56,9 +56,9 @@
 
     const deleteStatement = () => {
 
-        $api.post('http://localhost:8000/deleteStatement/', {
+        $api.post('http://localhost:8000/delete-statement/', {
             statement_id: id,
-        })
+        }, {withCredentials: true})
         .then((response) => {
             console.log(response)
         })
