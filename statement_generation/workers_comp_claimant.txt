@@ -16,15 +16,15 @@ Location: {{ location }}
 Investigator:	Joshua Massoud (412333813)
 
 
-1.	This statement made by me accurately sets out the evidence which I would be prepared, if necessary, to give in court as a witness. The statement is true to the best of my knowledge and belief and I make it knowing that, if it is tendered in evidence, I shall be liable to prosecution if I have wilfully stated in it anything I know to be false or do not believe to be true. 
+1. This statement made by me accurately sets out the evidence which I would be prepared, if necessary, to give in court as a witness. The statement is true to the best of my knowledge and belief and I make it knowing that, if it is tendered in evidence, I shall be liable to prosecution if I have wilfully stated in it anything I know to be false or do not believe to be true. 
 
-2.	By providing this statement to {{ client }}, I acknowledge and consent to {{ client }} handling my personal information under its Privacy Statement. I have been provided with a copy of that Privacy Statement today.   
+2. By providing this statement to {{ client }}, I acknowledge and consent to {{ client }} handling my personal information under its Privacy Statement. I have been provided with a copy of that Privacy Statement today.   
 
-3.	I understand that the personal information I provide to {{ client }} may be disclosed to other parties in line with that Privacy Statement, such as other people connected with this claim, other insurers and potentially the police.
+3. I understand that the personal information I provide to {{ client }} may be disclosed to other parties in line with that Privacy Statement, such as other people connected with this claim, other insurers and potentially the police.
 
-4.	I have been advised that {{ name }} has instigated a liability insurance claim in respect of an incident which occurred at {{ company_name }} on {{ injury_date}}.
+4. I have been advised that {{ name }} has instigated a liability insurance claim in respect of an incident which occurred at {{ company_name }} on {{ injury_date}}.
 
-5. I have agreed to provide this signed statement to [Investigator’s name] acting on behalf of {{ client }} in relation to the abovementioned insurance claim which can be identified by Claim Number [claim number]. The statement will be obtained via [Face to Face/Telephone/Video] interview.
+5. I have agreed to provide this signed statement to [Investigator’s name] acting on behalf of {{ client }} in relation to the abovementioned insurance claim which can be identified by Claim Number [claim number]. The statement will be obtained via {{ interview_method }} interview.
 
 6. I do/do not require a support person to provide this statement.
 
@@ -36,7 +36,7 @@ Investigator:	Joshua Massoud (412333813)
 
 10. I am {{ age }} years of age. My date of birth is {{ dob }}.
 
-11. I have identified myself by producing my [state] driving licence photo identification number [drivers licence number].
+11. I have identified myself by producing my {{ state }} driving licence photo identification number {{ drivers_licence_number }}.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -59,6 +59,7 @@ The scene/area/equipment/material
 Claimant’s Role
 
 21. Describe the claimant’s background and role – why was he/she there at the time?
+My role with {{ company_name }} is {{ occupation }}
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -89,6 +90,7 @@ Familiarity
 Training/Instructions
 
 28. Describe any relevant training/instructions provided to the claimant prior to the incident.
+I am trained in {{ qualification }}
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
