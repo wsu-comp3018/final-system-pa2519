@@ -24,7 +24,7 @@ Investigator:	Joshua Massoud (412333813)
 
 4.	I have been advised that {{ name }} has instigated a liability insurance claim in respect of an incident which occurred at {{ company_name }} on {{ injury_date}}.
 
-5. I have agreed to provide this signed statement to [Investigator’s name] acting on behalf of {{ client }} in relation to the abovementioned insurance claim which can be identified by Claim Number [claim number]. The statement will be obtained via [Face to Face/Telephone/Video] interview.
+5. I have agreed to provide this signed statement to [Investigator’s name] acting on behalf of {{ client }} in relation to the abovementioned insurance claim which can be identified by Claim Number [claim number]. The statement will be obtained via {{ interview_method }} interview.
 
 6. I do/do not require a support person to provide this statement.
 
@@ -36,7 +36,7 @@ Investigator:	Joshua Massoud (412333813)
 
 10. I am {{ age }} years of age. My date of birth is {{ dob }}.
 
-11. I have identified myself by producing my [state] driving licence photo identification number [drivers licence number].
+11. I have identified myself by producing my {{ state }} driving licence photo identification number {{ drivers licence number }}.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -59,6 +59,7 @@ The scene/area/equipment/material
 Claimant’s Role
 
 21. Describe the claimant’s background and role – why was he/she there at the time?
+My role with {{ company_name }} is {{ occupation }}
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -89,6 +90,7 @@ Familiarity
 Training/Instructions
 
 28. Describe any relevant training/instructions provided to the claimant prior to the incident.
+I am trained in {{ qualification }}
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
