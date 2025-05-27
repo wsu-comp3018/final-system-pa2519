@@ -111,6 +111,14 @@ def getSummary(request):
         return Response(status=401)
     
 
+@api_view(['POST'])
+def uploadTemplates(request):
+    user = request.user.id
+    session_id = request.data.get('session_id')
+
+    try:
+        
+    except:
 
 @api_view(['POST'])
 def transcribe(request):
