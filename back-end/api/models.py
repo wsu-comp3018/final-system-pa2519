@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+from django.utils.text import slugify
 
 # Create your models here.
 class Users(models.Model):
@@ -23,10 +24,18 @@ class Users(models.Model):
 
 class StatementTemplates(models.Model):
     id = models.IntegerField(primary_key=True)
-    slug = models.SlugField(unique=True, max_length=250)
+    slug = models.SlugField(unique=True, max_length=250,blank=True)
     name = models.CharField(max_length=250)
     template_path = models.FileField(upload_to='templates/', blank=True, null=True)
+    
+    def save(self,*args, **kwargs):
+        self.slug=slugify(self.name)
+        super().save(*args,**kwargs)
 
+    def __str__(self):
+        return self.name
+    class Meta:
+        unique_together=('name','slug')
 class Sessions(models.Model):
     id = models.IntegerField(primary_key=True)
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)

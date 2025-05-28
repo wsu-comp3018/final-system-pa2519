@@ -5,7 +5,9 @@ import argon2
 from rest_framework_simplejwt.tokens import RefreshToken
 import whisper
 from summariser.views import summaryFunction
-
+from rest_framework.permissions import IsAuthenticated
+from .serializers import StatementTemplateSerializer
+from rest_framework import viewsets
 
 ph = argon2.PasswordHasher()
 model = whisper.load_model("base")
@@ -109,16 +111,10 @@ def getSummary(request):
         return Response({'Summary': text}, status=200)
     except:
         return Response(status=401)
-    
 
-@api_view(['POST'])
-def uploadTemplates(request):
-    user = request.user.id
-    session_id = request.data.get('session_id')
-
-    try:
-        
-    except:
+class uploadTemplates(viewsets.ModelViewSet):
+    serializer_class=StatementTemplateSerializer
+    queryset=StatementTemplates.objects.all()
 
 @api_view(['POST'])
 def transcribe(request):
