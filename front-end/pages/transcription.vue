@@ -375,7 +375,7 @@
     </div>
 
     <!-- A menu will pop up to allow users to upload templates (hidden for now) -->
-    <!-- <div v-if="uploadMenu" class="absolute z-10 bg-[rgba(0,0,0,0.8)] text-white w-full h-dvh">
+    <!--<div v-if="uploadMenu" class="absolute z-10 bg-[rgba(0,0,0,0.8)] text-white w-full h-dvh">
         <div class="p-5 bg-white text-black w-[300px] rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
             <Icon class="absolute right-0 top-0 mt-2 mr-2 cursor-pointer" size="20px" name="gridicons:cross" @click="toggleUploadMenu"/>
 
