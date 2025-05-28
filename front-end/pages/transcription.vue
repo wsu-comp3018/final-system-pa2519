@@ -4,8 +4,9 @@
         border-color: #6b7280;
         width: 100%;
         height: 40px;
-        
-        padding: 24px 0 24px 0;
+        border: none;
+        border-bottom: 2px solid;
+        padding: 20px 0 20px 0;
         text-indent: 16px;
     }
 
@@ -27,6 +28,7 @@
             client_fname: '',
             client_lname: '',
             session_Name: '',
+            client_email: '',
         }
     })
     const currentSessionID = ref(null);
@@ -48,6 +50,7 @@
             form.input.client_fname = '';
             form.input.client_lname = '';
             form.input.session_Name = '';
+            form.input.client_email = '';
 
             file.value = [];
         }
@@ -109,6 +112,7 @@
             console.log(response.data.statement_id);
             const id = response.data.statement_id
             if (!id) {
+                generationButtonText.value = 'Generate Statement';
                 return;
             }
             generationButtonText.value = 'Generate Statement';
@@ -124,7 +128,7 @@
 
     const createSession = () => {
         emptyError.value = false;
-        if (form.input.client_fname === '' || form.input.client_lname === '' || form.input.session_Name === '') {
+        if (form.input.client_fname === '' || form.input.client_lname === '' || form.input.session_Name === '' || form.input.client_email === '') {
             emptyError.value = true;
             return;
         }
@@ -133,6 +137,7 @@
             fname: form.input.client_fname,
             lname: form.input.client_lname,
             session_name: form.input.session_Name,
+            email: form.input.client_email,
         }, {withCredentials: true})
         .then((response) => {
             console.log(response);
@@ -141,6 +146,7 @@
                 form.input.client_fname = '';
                 form.input.client_lname = '';
                 form.input.session_Name = '';
+                form.input.client_email = '';
             }
             getSessions();
 
@@ -199,6 +205,7 @@
             form.input.client_fname = '';
             form.input.client_lname = '';
             form.input.session_Name = '';
+            form.input.client_email = '';
 
         } else if (menuType === 'upload') {
             uploadTemplatePopup.value = !uploadTemplatePopup.value
@@ -400,21 +407,30 @@
     //     })
     // }
 
+        const test = () => {
+            $api.post('http://localhost:8000/api/test/')
+            .then((response) => {
+                console.log(response)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        }
+
 </script>
 
 
 <template>
 
+    <p @click="test" class="bg-gray-500 cursor-pointer w-fit">test</p>
+
     <div class="flex h-[calc(100%-61.5px)]">
 
         <!-- sidebar -->
-        <div class="flex flex-col w-[230px] bg-[#444444] relative overflow-hidden">
+        <div class="flex flex-col w-[230px] bg-[#222222] relative overflow-hidden">
             <div class="py-4 grow overflow-hidden">
-                <div class="text-center font-bold text-[25px] underline">
-                    <h1>Sessions</h1>
-                </div>
                 <div class="flex-grow px-2 max-h-full overflow-y-auto">
-                    <div v-for="item in sessionList" class="flex items-center truncate text-[15px] px-2 py-1 transition cursor-pointer hover:bg-neutral-600">
+                    <div v-for="item in sessionList" class="flex items-center truncate text-[18px] px-2 py-1 transition cursor-pointer hover:bg-neutral-600">
                         <h2 class="truncate w-full" @click="updateLocalSessionView(item.id)">{{ item.session_name }}</h2>
                         <div class="grow flex items-center justify-end">
                             <Icon @click="deleteSession(item.id)" size="20px" name="material-symbols-light:delete-outline"/>
@@ -474,25 +490,28 @@
     </div>
 
     <!-- displays a popup to allow user to fill basic info such as client details and name for session, when user clicks new session-->
-    <div v-if="isNewSession" class="absolute z-10 bg-[rgba(0,0,0,0.8)] text-white w-full h-full">
+    <div v-if="isNewSession" class="absolute z-10 bg-[rgba(0,0,0,0.8)] w-full h-dvh">
         <div class="p-5 bg-white text-black w-[300px] rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <Icon class="absolute right-0 top-0 mt-2 mr-2 cursor-pointer" size="20px" name="gridicons:cross" @click="toggleMenus('session')"/>
             <h1 class="text-[20px] text-center">Enter client details</h1>
             <form class="w-full" @submit.prevent="createSession">
                 <label for="fname">First Name</label>
-                <input type="text" id="fname" v-model="form.input.client_fname" name="email" placeholder="First Name">
+                <input type="text" id="fname" v-model="form.input.client_fname" name="email">
 
                 <label for="lname">Last Name</label>
-                <input type="text" id="lname" v-model="form.input.client_lname" name="lname" placeholder="Last Name">
+                <input type="text" id="lname" v-model="form.input.client_lname" name="lname">
+
+                <label for="email">Email Address</label>
+                <input type="email" id="email" v-model="form.input.client_email" name="email">
 
                 <label for="session">Session Name (has to be unique)</label>
-                <input type="text" id="session" v-model="form.input.session_Name" name="session" placeholder="Session Name">
+                <input type="text" id="session" v-model="form.input.session_Name" name="session">
 
                 <p v-if="emptyError" class="text-center pt-3"><span>Please fill all fields</span></p>
                 <p v-if="creationError" class="text-center pt-3"><span>Please type a unique session name</span></p>
 
                 <div class="text-center pt-3">
-                    <input type="submit" value="Submit" class="cursor-pointer">
+                    <input type="submit" value="Submit" class="bg-[#222222] text-white hover:underline px-3 py-1 rounded-md cursor-pointer">
                 </div>
             </form>
         </div>
@@ -514,13 +533,13 @@
         </div>
     </div> -->
 
-    <div v-if="uploadRecordingPopup" class="absolute z-10 bg-[rgba(0,0,0,0.8)] text-white w-full h-dvh">
+    <div v-if="uploadRecordingPopup" class="absolute z-10 bg-[rgba(0,0,0,0.8)] w-full h-dvh">
         <div class="p-5 bg-white text-black w-[400px] rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
             <Icon class="absolute right-0 top-0 mt-2 mr-2 cursor-pointer" size="20px" name="gridicons:cross" @click="confirmRecordingUpload('No')"/>
-            <p>Do you want to upload this recording to the server? Enter a name for this recording.</p>
-            <input v-model="recordingName.name" type="text">
+            <p>Do you want to upload this recording to the server? If so enter a name for this recording.</p>
+            <input class="bg-white my-2" v-model="recordingName.name" type="text">
             <div class="flex justify-center gap-4 pt-3">
-                <button class="px-2 py-1 bg-gray-500" @click="confirmRecordingUpload('Yes')">Confirm</button>
+                <button class="bg-[#222222] text-white hover:underline px-3 py-1 rounded-md" @click="confirmRecordingUpload('Yes')">Confirm</button>
             </div>
         </div>
     </div>

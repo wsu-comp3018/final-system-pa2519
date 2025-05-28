@@ -57,6 +57,7 @@ class Interviewees(models.Model):
     first_name = models.CharField(max_length=250)
     last_name = models.CharField(max_length=250)
     session_id = models.ForeignKey(Sessions, null=True, on_delete=models.CASCADE)
+    email = models.CharField(max_length=250)
 
 # class Cases(models.Model):
 #     id = models.IntegerField(primary_key=True)

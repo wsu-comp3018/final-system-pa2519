@@ -56,7 +56,7 @@
     const changeEmail = ref(false);
     const passwordError = ref(false);
     const updateSuccessful = ref(null);
-    const errorMessage = ref('');
+    const updateErrorMessage = ref('');
     const userDetails = ref([]);
 
     const getAccountSettings = async () => {
@@ -84,14 +84,14 @@
         }
 
         if(form.current_password && form.new_password === '') {
-            errorMessage.value = "Current password empty."
+            updateErrorMessage.value = "Current password empty."
             passwordError.value = true;
             setTimeout(() => {
                 passwordError.value = false;
             }, 3000);
             return;
         } else if (form.current_password === '' && form.new_password) {
-            errorMessage.value = "New password empty"
+            updateErrorMessage.value = "New password empty"
             passwordError.value = true;
             setTimeout(() => {
                 passwordError.value = false;
@@ -111,8 +111,8 @@
             }, 3000);
         })
         .catch((error) => {
-            if (error.status == 401) {
-                errorMessage.value = "Your current password is incorrect"
+            if (error.status == 400) {
+                updateErrorMessage.value = "Your current password is incorrect"
                 passwordError.value = true;
                 setTimeout(() => {
                     passwordError.value = false;
@@ -144,13 +144,34 @@
 
     const confirmDelete = (answer) => {
         if (answer === 'Yes') {
-            uploadRecordingPopup.value = false;
-            // make api call
+            confirmPopup.value = false;
+            $api.post('http://localhost:8000/api/delete-account/', {withCredentials: true})
+            .then((response) => {
+                const token = useCookie('api_token');
+                const refresh = useCookie('refresh_token');
+                token.value = null;
+                refresh.value = null;
+                return navigateTo('/login')
+            })
+            .catch((error) => {
+                displayErrorMessage();
+                return;
+            })
         } else {
-            uploadRecordingPopup.value = false;
+            confirmPopup.value = false;
             return;
         }
     }
+
+    const errorMessage = ref('Error in deleting account, try again.');
+    const errorPopup = ref(false);
+    const displayErrorMessage = () => {
+        errorPopup.value = true;
+        setTimeout(() => {
+            errorPopup.value = false;
+        }, 3000);
+    }
+    
 </script>
 
 <template> 
@@ -200,7 +221,7 @@
                     </div>
 
                     <div v-if="passwordError" class="text-center">
-                        <span class="text-red-500">{{ errorMessage }}</span>
+                        <span class="text-red-500">{{ updateErrorMessage }}</span>
                     </div>
                 </form>
 
@@ -228,10 +249,16 @@
         <div class="p-5 bg-white text-black w-[400px] rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
             <p>Are you sure you want to delete your account?</p>
             
-            <div class="flex justify-center gap-4 pt-3">
-                <button class="px-2 py-1 bg-gray-500" @click="confirmDelete('Yes')">Yes</button>
-                <button @click="confirmDelete('No')">No</button>
+            <div class="flex justify-center gap-4 pt-3 text-white">
+                <button class="bg-[#222222] px-3 py-1 rounded-md" @click="confirmDelete('Yes')">Yes</button>
+                <button class="bg-[#222222] px-3 py-1 rounded-md" @click="confirmDelete('No')">No</button>
             </div>
+        </div>
+    </div>
+
+    <div v-if="errorPopup" class="absolute z-10 bg-[rgba(0,0,0,0.8)] w-full h-full">
+        <div class="p-5 text-white w-[400px] rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+            <p>{{ errorMessage }}</p>
         </div>
     </div>
 </template>

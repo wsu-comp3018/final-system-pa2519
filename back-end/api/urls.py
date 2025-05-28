@@ -11,7 +11,7 @@ urlpatterns = [
     path('reset/', views.resetPassword),
     path('update-account/', views.updateAccountDetails),
     path('create-account/', views.createAccount),
-    path('delete-account', views.deleteAccount),
+    path('delete-account/', views.deleteAccount),
     path('create-session/', views.createSession),
     path('get-usersettings', views.getAccountSettings),
     path('session-list/', views.getSessionList),
@@ -24,6 +24,7 @@ urlpatterns = [
     path('delete-statement/', views.deleteStatement),
     path('statement-list', views.getStatementList),
     path('upload-recording/', views.uploadRecordings),
+    path('test/', views.test),
     #path('downloadRecording/', views.downloadRecording),
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

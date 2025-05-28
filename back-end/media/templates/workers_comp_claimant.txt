@@ -1,0 +1,196 @@
+Statement in the matter of X
+
+STATEMENT BY:	
+
+Name: {{ name }}
+Telephone: {{ phone }}
+Email: {{ email }}
+Occupation: {{ occupation }}
+
+INTERVIEW DETAILS:
+
+Date: {{ date }}
+Time Commenced:	
+Method:	{{ method }}
+Location: {{ location }}
+Investigator:	Joshua Massoud (412333813)
+
+
+1. This statement made by me accurately sets out the evidence which I would be prepared, if necessary, to give in court as a witness. The statement is true to the best of my knowledge and belief and I make it knowing that, if it is tendered in evidence, I shall be liable to prosecution if I have wilfully stated in it anything I know to be false or do not believe to be true. 
+
+2. By providing this statement to {{ client }}, I acknowledge and consent to {{ client }} handling my personal information under its Privacy Statement. I have been provided with a copy of that Privacy Statement today.   
+
+3. I understand that the personal information I provide to {{ client }} may be disclosed to other parties in line with that Privacy Statement, such as other people connected with this claim, other insurers and potentially the police.
+
+4. I have been advised that {{ name }} has instigated a liability insurance claim in respect of an incident which occurred at {{ company_name }} on {{ injury_date}}.
+
+5. I have agreed to provide this signed statement to [Investigator’s name] acting on behalf of {{ client }} in relation to the abovementioned insurance claim which can be identified by Claim Number [claim number]. The statement will be obtained via {{ interview_method }} interview.
+
+6. I do/do not require a support person to provide this statement.
+
+7. I do/do not require the assistance of a qualified interpreter.
+
+8. I am aware this statement will form part of the claim documentation and will be forwarded to {{ client }} for their information and use and to assist them to manage my insurance claim.
+
+9. My full name is {{ name }}.
+
+10. I am {{ age }} years of age. My date of birth is {{ dob }}.
+
+11. I have identified myself by producing my {{ state }} driving licence photo identification number {{ drivers_licence_number }}.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Background and Role
+
+16. This incident happened at {{ time }} on {{ injury_date }} at {{ company_name }}.
+
+17. Confirm ownership and management
+
+18. My role with {{ company_name }} is {{ occupation }}.
+
+19. Confirm any contractual arrangements
+
+The scene/area/equipment/material
+
+20. Describe the scene/area/equipment/material etc involved in the incident
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Claimant’s Role
+
+21. Describe the claimant’s background and role – why was he/she there at the time?
+My role with {{ company_name }} is {{ occupation }}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Previous Complaints
+
+22. Has the insured received any prior complaint(s) regarding the scene/area/equipment/material? If not, make this comment. Is so, please obtain full details, including what the insured did about these complaints.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Previous Incidents
+
+23. Has there been any prior incident/injury arise from the scene/area/equipment/material? If not, make this comment. Is so, please obtain full details, including what action was taken by the insured or any other party.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Familiarity
+
+24. Was the claimant familiar with this scene/area/equipment etc?
+
+25. Had the claimant been there before
+
+26. Had the claimant used the equipment/materials before
+
+27. Did the claimant ever complain about it? If not, make this comment. If so, describe in detail
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Training/Instructions
+
+28. Describe any relevant training/instructions provided to the claimant prior to the incident.
+I am trained in {{ qualification }}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Circumstances of incident
+
+29. How did the insured find out about the incident?
+
+30. Describe the circumstances as known to them
+
+31. CCTV?
+
+32. Witnesses
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Conditions
+
+33. Weather
+
+34. Visibility
+
+35. Lighting
+
+36. etc
+
+37. Does the insured believe the conditions contributed to the incident in any way?
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Cause
+
+38. The incident occured {{ incident_description }}
+
+39. What could have prevented the incident?
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Post Incident Details
+
+40. Describe the post incident details in a simple chronological order, including:
+
+· Evidence at the scene
+
+· Discussions between parties
+
+· Involvement of witnesses
+
+· Involvement of emergency services
+
+· Photographs
+
+· CCTV/Dashcam
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Other Parties
+
+41. Identify and describe the other parties, including any witnesses
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Injuries
+
+42. My current symptons include {{ injury_details }}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Police Charges
+
+43. Any charges issued
+
+44. Any payment of fines
+
+45. If not finalised, any indications by police as to who might be charged
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fault
+
+46. Who does the insured believe was at fault and why
+
+47. What could have prevented the incident from occurring?
+
+Did the claimant’s actions play a part?
+
+48. Do you think the claimant’s actions in any way contributed to the cause of the incident? If not, make this comment. If so, describe in detail.
+
+
+Other contributing factors
+
+49. Were there any other factors which contributed to the incident occurring
+
+
+Changes since the incident
+
+50. Has the insured made any changes to the scene/equipment/material etc since the incident?
+
+51. Has anybody else/any other party made any changes to the scene/equipment/material etc since the incident?
+
+
+Contact with the other party
+
+52. Any contact since the incident
