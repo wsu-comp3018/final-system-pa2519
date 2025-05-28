@@ -25,7 +25,7 @@ I understand that the personal information I provide to {{ client}} may be discl
 
 I have been advised that {{ name }} has instigated a liability insurance claim in respect of an incident which occurred at {{ company_name }} on {{ injury_date }}. 
 
-I have agreed to provide this signed statement to [Investigator’s name] acting on behalf of {{ client }} in relation to the abovementioned insurance claim which can be identified by Claim Number [claim number].  The statement will be obtained via {{ method }} interview. 
+I have agreed to provide this signed statement to [Investigator’s name] acting on behalf of ADD CLIENT NAME in relation to the abovementioned insurance claim which can be identified by Claim Number [claim number].  The statement will be obtained via {{ method }} interview. 
 
 I do/do not require a support person to provide this statement. 
 
@@ -124,7 +124,6 @@ Witnesses
 Conditions 
 
 Weather 
-Weather conditions include {{ weather }}.
 
 Visibility 
 

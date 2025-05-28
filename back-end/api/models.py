@@ -1,9 +1,10 @@
 from django.db import models
 from datetime import date
 from django.utils.text import slugify
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
-class Users(models.Model):
+class Users(AbstractUser):
 
     ROLE_INVESTIGATOR="INVESTIGATOR"
     ROLE_INSURER="INSURER"
@@ -66,6 +67,7 @@ class Interviewees(models.Model):
     first_name = models.CharField(max_length=250)
     last_name = models.CharField(max_length=250)
     session_id = models.ForeignKey(Sessions, null=True, on_delete=models.CASCADE)
+    email = models.CharField(max_length=250)
 
 # class Cases(models.Model):
 #     id = models.IntegerField(primary_key=True)

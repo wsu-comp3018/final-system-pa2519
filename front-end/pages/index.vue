@@ -1,5 +1,13 @@
 <script setup>
 
+    definePageMeta({
+        middleware: function (to, from) {
+            const token = useCookie('api_token');
+            if (token.value) {
+                setPageLayout('logged-in')
+            }
+        }
+    })
 </script>
 
 <template>
@@ -17,14 +25,13 @@
                     Designed specifically for investigators, insurers and legal teams.
                 </p>
 
-                <h2 class="text-[20px]">Powered by (need to add images)</h2>
+                <h2 class="text-[20px]">Powered by:</h2>
                 <div class="flex gap-4 pb-4 justify-center">
-                    <p class="bg-red-500 w-[100px] h-[100px]">Whisper</p>
-                    <p class="bg-red-500 w-[100px] h-[100px]">Spark</p>
-                    <p class="bg-red-500 w-[100px] h-[100px]">Others</p>
+                    <img src="~/assets/img/whisperAI.png" width="100" height="100">
+                    <img src="~/assets/img/sparkNLP.png" width="200">
                 </div>
 
-                <button class="rounded-xl border border-1 px-6 py-3 mt-5" >GET STARTED</button>
+                <button class="rounded-xl border border-1 px-6 py-3 mt-5" ><NuxtLink to="/login">GET STARTED</NuxtLink></button>
             </header>
         </div>
     </div>

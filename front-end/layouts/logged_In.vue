@@ -28,7 +28,6 @@
             </div>
 
             <nav class="flex justify-end items-center text-[20px] gap-5">
-                <button><NuxtLink>About</NuxtLink></button>
                 <button><NuxtLink to="/history">Statements</NuxtLink></button>
                 <button><NuxtLink to="/transcription">Record</NuxtLink></button>
                 <div class="relative">

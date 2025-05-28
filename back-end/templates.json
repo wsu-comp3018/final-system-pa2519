@@ -1,0 +1,29 @@
+[
+    {
+        "model": "api.StatementTemplates",
+        "pk": 1,
+        "fields": {
+            "slug": "PLC",
+            "name": "public_liability_claimant",
+            "template_path": "templates/public_liability_claimant.txt"
+        }
+    },
+    {
+        "model": "api.StatementTemplates",
+        "pk": 2,
+        "fields": {
+            "slug": "WCC",
+            "name": "workers_comp_claimant",
+            "template_path": "templates/workers_comp_claimant.txt"
+        }
+    },
+    {
+        "model": "api.StatementTemplates",
+        "pk": 3,
+        "fields": {
+            "slug": "WCW",
+            "name": "workers_comp_witness",
+            "template_path": "templates/workers_comp_witness"
+        }
+    }
+]
