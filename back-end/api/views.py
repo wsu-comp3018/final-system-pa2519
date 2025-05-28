@@ -352,24 +352,6 @@ def uploadRecordings(request):
     
     return Response(status=status.HTTP_200_OK)
 
-# WORKING BUT DISABLED FOR NOW
-# @api_view(['POST'])
-# def downloadRecording(request):
-#     sessionID = request.data.get('session_id')
-
-#     try:
-#         audioObjs = AudioRecordings.objects.filter(session_id_id = sessionID)
-#         with zipfile.ZipFile('audioRecordings.zip', 'w') as myZipFile:
-#             for audio in audioObjs:
-#                 myZipFile.write(audio.audio_path.path, os.path.basename(audio.audio_path.path))
-        
-#         print('here')
-#         return FileResponse(open('audioRecordings.zip', 'rb'), as_attachment=True, status=200)
-#         #return Response(status=200)
-#     except:
-#         print("error")
-#         return Response(status=500)
-
 @api_view(['POST'])
 def templateUpload(request):
 
