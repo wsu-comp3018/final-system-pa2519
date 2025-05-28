@@ -37,13 +37,11 @@
     const form = reactive({
         input: {
             email: '',
-            current_password: '',
             new_password: '',
         },
 
         error: {
             email: '',
-            password: '',
             new_password: '',
         }
     })
@@ -62,14 +60,6 @@
         }
     }
 
-    const validate_CurrentPassword = () => {
-        if (form.input.current_password === '') {
-            form.error.current_password = 'Required';
-        } else {
-            form.error.current_password = '';
-        }
-    }
-
     const validate_NewPassword = () => {
         if (form.input.new_password === '') {
             form.error.new_password = 'Required';
@@ -80,39 +70,11 @@
 
     const resetError = ref(false);
     const formValidation = () => {
-        validate_FirstName();
-        validate_LastName();
         validate_Email();
-        validate_Password();
-        validate_ConfirmPass();
-
-        console.log(form.input.fname);
-
-        if (form.error.email !== "" || form.error.current_password !== "" || form.error.new_password !== "") {
-            return;
-        }
-
-        $api.post('http://localhost:8000/api/reset/', {
-            email: form.input.email,
-            current_password: form.input.current_password,
-            new_password: form.input.new_password,
-        }, {withCredentials: true})
-        .then((response) => {
-            console.log(response);
-            if (response.status == 200) {
-                navigateTo('/login');
-            }
-        })
-        .catch((error) => {
-            resetError.value = true;
-            setTimeout(() => {
-                resetError.value = false;
-            }, 3000);
-            console.log("Error: ", error);
-        })
     }
     
 </script>
+
 
 <template>
     
@@ -121,7 +83,7 @@
         <div class="w-[450px] bg-[#222222] rounded-xl">
 
             <div class="p-10">
-                <h1 class="text-center text-[35px]"><b>Reset Your Password</b></h1>
+                <h1 class="text-center text-[35px]"><b>Enter your email</b></h1>
 
                 <form @submit.prevent="formValidation">
 
@@ -129,15 +91,7 @@
                     <input type="email" v-model="form.input.email" id="email" name="email" placeholder="Email" @blur="validate_Email">
                     <span>{{ form.error.email }}</span>
 
-                    <label for="password">CURRENT PASSWORD *</label>
-                    <input type="password" v-model="form.input.current_password" id="password" name="password" placeholder="Password" @blur="validate_CurrentPassword">
-                    <span>{{ form.error.current_password }}</span>
-
-                    <label for="confirm_pass">NEW PASSWORD *</label>
-                    <input type="password" v-model="form.input.new_password" id="confirm_pass" name="password" placeholder="Password" @blur="validate_NewPassword">
-                    <span>{{ form.error.new_password }}</span>
-
-                    <p v-if="resetError" class="text-center pt-3"><span>Email or password is incorrect</span></p>
+                    <p v-if="resetError" class="text-center pt-3"><span>Email is incorrect</span></p>
 
                     <input type="submit" value="Reset" class="cursor-pointer">
                 </form>

@@ -58,17 +58,6 @@ class Interviewees(models.Model):
     last_name = models.CharField(max_length=250)
     session_id = models.ForeignKey(Sessions, null=True, on_delete=models.CASCADE)
     email = models.CharField(max_length=250)
-
-# class Cases(models.Model):
-#     id = models.IntegerField(primary_key=True)
-#     case_number = models.IntegerField()
-#     case_type = models.TextField()
-#     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
-#     date_opened = models.DateField
-#     date_closed = models.DateField
-#     status = models.TextField()
-#     interviewee_id = models.ForeignKey(Interviewees, null=True, on_delete=models.SET_NULL)
-
  
 
 class Statements(models.Model):

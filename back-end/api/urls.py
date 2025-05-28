@@ -8,7 +8,6 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     path('login/', views.loginUser),
     path('logout/', views.logoutUser),
-    path('reset/', views.resetPassword),
     path('update-account/', views.updateAccountDetails),
     path('create-account/', views.createAccount),
     path('delete-account/', views.deleteAccount),
@@ -25,7 +24,6 @@ urlpatterns = [
     path('statement-list', views.getStatementList),
     path('upload-recording/', views.uploadRecordings),
     path('test/', views.test),
-    #path('downloadRecording/', views.downloadRecording),
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

@@ -78,10 +78,10 @@
 
         <div class="flex justify-center gap-4 overflow-hidden mt-5">
 
-            <div class="h-fit w-2/5 bg-[#626060]">
-                <h1 class="text-center text-[25px] bg-gray-700">Selected Statement</h1>
+            <div class="h-fit w-2/5 bg-[#454444]">
+                <h1 class="text-center text-[28px] bg-[#222222]">Selected Statement</h1>
                 <div class="px-5 py-2 h-[90%]">
-                    <p class="text-[20px]">{{ currentSelectStatement }}</p>
+                    <p class="text-[18px]">{{ currentSelectStatement }}</p>
                 </div>
             </div>
 
@@ -91,12 +91,12 @@
                     <p>Its empty here.</p>
                 </div>
                 <div v-for="item in searchFilterList">
-                    <div class="flex mb-5 p-3 bg-[#626060]">
+                    <div class="flex mb-5 p-3 bg-[#454444] rounded-md">
                         <div>
-                            <p class="text-[25px] hover:underline cursor-pointer" @click="showSelectedStatement(item.statement_id)">Statement for - {{ item.client_first_name }} {{ item.client_last_name }}</p>
+                            <p class="text-[24px] hover:underline cursor-pointer" @click="showSelectedStatement(item.statement_id)">Statement for - {{ item.client_first_name }} {{ item.client_last_name }}</p>
                         </div>
                         <div class="grow self-end text-right">
-                            <button class="bg-gray-800 px-4 py-1 text-[16px]" @click="redirectToStatement(item.statement_id)">Open</button>
+                            <button class="bg-[#222222] rounded-sm px-4 py-1 text-[16px]" @click="redirectToStatement(item.statement_id)">Open</button>
                         </div>
                     </div>
                 </div>

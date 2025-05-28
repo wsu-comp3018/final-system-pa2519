@@ -15,11 +15,11 @@
             statement_id: id,
         }, {withCredentials: true})
         .then((response) => {
-            statement_content.value = response.data.statement;
+            statement_content.value = response.data.statement.split(/\n/);
 
         })
         .catch(async (error) => {
-            //await navigateTo('/transcription');
+            await navigateTo('/transcription');
             console.log(error);
         })
     }
@@ -110,7 +110,9 @@
 
         <div class="flex justify-center h-[calc(100%-120px)] gap-6">
             <div class="relative w-full h-full border-[5px] border-[#484949] rounded-xl bg-white p-4 overflow-hidden">
-                <p ref="editableText" class="text-black h-full overflow-y-auto outline-none" >{{ statement_content }}</p>
+                <p ref="editableText" class="text-black h-full overflow-y-auto outline-none" >
+                    <p v-for="line in statement_content">{{ line }}</p>
+                </p>
                 <button @click="toggleEdit('false')" class="bg-[#222222] absolute bottom-3 right-3 px-3 py-1 rounded-md">Save</button>
             </div>
 
@@ -128,8 +130,8 @@
             <p>Are you sure you want to delete the statement?</p>
             
             <div class="flex justify-center gap-4 pt-3">
-                <button class="px-2 py-1 bg-gray-500" @click="confirmDelete('Yes')">Yes</button>
-                <button @click="confirmDelete('No')">No</button>
+                <button class="px-2 py-1" @click="confirmDelete('Yes')">Yes</button>
+                <button class="px-2 py-1" @click="confirmDelete('No')">No</button>
             </div>
         </div>
     </div>

@@ -31,8 +31,13 @@
             client_email: '',
         }
     })
+
+    const sessionList = ref([]);
     const currentSessionID = ref(null);
     const currentSessionName = ref('');
+    let newSession = ref(false);
+
+    let uploadTemplatePopup = ref(false);
     const emptyError = ref(false);
     const creationError = ref(false);
     const transcription = ref("");
@@ -40,11 +45,12 @@
     const { $api } = useNuxtApp();
     const hideSummary = ref(false);
     const generationButtonText = ref('Generate Statement');
+    const summaryButtonText = ref('Summarise')
 
 
     const closePopups = (event) => {
         if (event.key === 'Escape') {
-            isNewSession.value = false;
+            newSession.value = false;
             uploadTemplatePopup.value = false;
 
             form.input.client_fname = '';
@@ -60,7 +66,6 @@
         document.addEventListener('keydown', closePopups);
     })
     
-    const sessionList = ref([]);
     const getSessions = () => {
         $api.get('http://localhost:8000/api/session-list/', {withCredentials: true})
         .then((response) => {
@@ -74,6 +79,16 @@
     getSessions();
     
     const callSummariser = () => {
+
+        if (transcription.value === '') {
+            console.log("No transcription");
+            summaryButtonText.value = 'No transcription available';
+            setTimeout(() => {
+                summaryButtonText.value = 'Summarise';
+            }, 3000);
+            return;
+        }
+
         hideSummary.value = true;
 
         $api.post('http://localhost:8000/api/summary/', {
@@ -102,6 +117,10 @@
 
         if (transcription.value === '') {
             console.log("No transcription");
+            generationButtonText.value = 'No transcription available';
+            setTimeout(() => {
+                generationButtonText.value = 'Generate';
+            }, 3000);
             return;
         }
 
@@ -142,7 +161,7 @@
         .then((response) => {
             console.log(response);
             if (response.status == 200) {
-                isNewSession.value = false;
+                newSession.value = false;
                 form.input.client_fname = '';
                 form.input.client_lname = '';
                 form.input.session_Name = '';
@@ -196,19 +215,18 @@
     }
 
 
-    let isNewSession = ref(false);
-    let uploadTemplatePopup = ref(false);
     const toggleMenus = (menuType) => {
         if (menuType === 'session') {
-            isNewSession.value = !isNewSession.value;
+            newSession.value = !newSession.value;
 
             form.input.client_fname = '';
             form.input.client_lname = '';
             form.input.session_Name = '';
             form.input.client_email = '';
 
-        } else if (menuType === 'upload') {
-            uploadTemplatePopup.value = !uploadTemplatePopup.value
+        } else if (menuType === 'templates') {
+            console.log('called')
+            uploadTemplatePopup.value = !uploadTemplatePopup.value;
         }
     }
 
@@ -221,28 +239,37 @@
         }, 3000);
     }
 
-    // Functions to open UI and upload templates NOTE: IGNORE FOR NOW.
+
     const inputFile = useTemplateRef('fileInput');
     const openFileInputWindow = () => {
         inputFile.value.click();
     }
 
-    var file = ref(null);
+    const file = ref(null);
     const getFile = (e) => {
         file.value = e.target.files[0];
     }
 
-    let fileError = ref("");
+    const fileError = ref("");
+    const selected = ref(null);
     const fileSubmit = () => {
         fileError.value = "";
-        if (file.value.length === 0) {
-            fileError.value = "Please submit a file.";
-            return
-        } else {
-            const template = new FormData();
-            template.append('template', file.value);
+        console.log(selected.value);
 
-            $api.post("http://localhost:8000/api/upload/template/", template, {withCredentials: true})
+        if (selected && file.value) {
+            fileError.value = "Only choose one option."
+            return;
+        }
+        else {
+            const template = new FormData();
+            if (selected) {
+                template.append('template', selected)
+            }
+            else if(file.value) {
+                template.append('template', file.value)
+            }
+
+            $api.post("http://localhost:8000/api/", template, {withCredentials: true})
             .then((response) => {
                 console.log(response);
             })
@@ -381,32 +408,6 @@
         })
     }
 
-    // Works but cannot but issue with downloaded file
-    // const downloadRecording = () => {
-    //     $api.post('http://localhost:8000/api/downloadRecording/', {
-    //         session_id: currentSessionID.value,
-    //         responseType: 'blob',
-    //     })
-    //     .then((response) => {
-    //         console.log(response);
-    //         const blob = new Blob([response.data], {type: 'application/zip'});
-    //         var url = window.URL.createObjectURL(blob);
-    //         var a = document.createElement('a');
-    //         document.body.appendChild(a);
-    //         a.style = "display: none;";
-
-    //         a.href = url;
-    //         a.download = 'AudioRecordings';
-    //         a.click();
-
-    //         document.body.removeChild(a);
-    //         window.URL.revokeObjectURL(url);
-    //     })
-    //     .catch((error) => {
-    //         console.log(error);
-    //     })
-    // }
-
         const test = () => {
             $api.post('http://localhost:8000/api/test/')
             .then((response) => {
@@ -422,15 +423,17 @@
 
 <template>
 
-    <p @click="test" class="bg-gray-500 cursor-pointer w-fit">test</p>
+    <!-- <p @click="test" class="bg-gray-500 cursor-pointer w-fit">test</p> -->
 
     <div class="flex h-[calc(100%-61.5px)]">
-
         <!-- sidebar -->
         <div class="flex flex-col w-[230px] bg-[#222222] relative overflow-hidden">
-            <div class="py-4 grow overflow-hidden">
-                <div class="flex-grow px-2 max-h-full overflow-y-auto">
-                    <div v-for="item in sessionList" class="flex items-center truncate text-[18px] px-2 py-1 transition cursor-pointer hover:bg-neutral-600">
+            <div class="py-4 px-4 grow overflow-hidden">
+                <div class="font-bold text-[22px] underline">
+                    <h1>Your sessions</h1>
+                </div>
+                <div class="flex-grow max-h-full overflow-y-auto">
+                    <div v-for="item in sessionList" class="flex items-center truncate text-[18px] py-1 transition cursor-pointer hover:bg-neutral-600">
                         <h2 class="truncate w-full" @click="updateLocalSessionView(item.id)">{{ item.session_name }}</h2>
                         <div class="grow flex items-center justify-end">
                             <Icon @click="deleteSession(item.id)" size="20px" name="material-symbols-light:delete-outline"/>
@@ -474,11 +477,10 @@
                 <div class="flex justify-center gap-3 text-[30px] mx-3">
                     <div class="flex items-center p-4 bg-[#222222] space-x-6 rounded-xl">
                         <Icon size="37px" class="cursor-pointer" name="fluent:mic-record-20-regular" @click="enableMicrophone"/>
-                        <Icon size="37px" class="cursor-pointer" name="material-symbols:upload-file-outline" @click="toggleMenus('upload')"/>
-                        <Icon size="37px" class="cursor-pointer" name="material-symbols:cloud-download-outline"/>
+                        <Icon size="37px" class="cursor-pointer" name="material-symbols:upload-file-outline" @click="toggleMenus('templates')"/>
                     </div>
                     <div class="p-4 bg-[#222222] rounded-xl">
-                        <button @click="callSummariser">Summarise</button>
+                        <button @click="callSummariser">{{ summaryButtonText }}</button>
                     </div>
                     <div class="p-4 bg-[#222222] rounded-xl">
                         <button @click="callStatementGenerator">{{ generationButtonText }}</button>
@@ -490,7 +492,7 @@
     </div>
 
     <!-- displays a popup to allow user to fill basic info such as client details and name for session, when user clicks new session-->
-    <div v-if="isNewSession" class="absolute z-10 bg-[rgba(0,0,0,0.8)] w-full h-dvh">
+    <div v-if="newSession" class="absolute z-10 bg-[rgba(0,0,0,0.8)] w-full h-dvh">
         <div class="p-5 bg-white text-black w-[300px] rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <Icon class="absolute right-0 top-0 mt-2 mr-2 cursor-pointer" size="20px" name="gridicons:cross" @click="toggleMenus('session')"/>
             <h1 class="text-[20px] text-center">Enter client details</h1>
@@ -518,20 +520,27 @@
     </div>
 
     <!-- A menu will pop up to allow users to upload templates (hidden for now) -->
-    <!-- <div v-if="uploadTemplateMenu" class="absolute z-10 bg-[rgba(0,0,0,0.8)] text-white w-full h-dvh">
+    <div v-if="uploadTemplatePopup" class="absolute z-10 bg-[rgba(0,0,0,0.8)] text-white w-full h-dvh">
         <div class="p-5 bg-white text-black w-[300px] rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-            <Icon class="absolute right-0 top-0 mt-2 mr-2 cursor-pointer" size="20px" name="gridicons:cross" @click="toggleMenus('upload')"/>
+            <Icon class="absolute right-0 top-0 mt-2 mr-2 cursor-pointer" size="20px" name="gridicons:cross" @click="toggleMenus('templates')"/>
 
-            <h1 class="text-[20px]">Upload a template</h1>
+            <h1 class="text-[18px]">Upload a template or select one from the dropdown</h1>
             <form method="post" @submit.prevent="fileSubmit">
+                <select v-model="selected" class="m-0 bg-[#444343] text-white indent-3 py-2" name="template">
+                    <option disable value="default">Select a template</option>
+                    <option value="1">Public Liability</option>
+                    <option value="2">Workers Comp Claimant</option>
+                    <option value="3">Worker Comp Witness</option>
+                </select>
+                <p class="py-3">OR</p>
                 <input ref="fileInput" @change="getFile" type="file" name="template" id="template" class="hidden">
-                <button type="button" class="bg-blue-500 w-full py-2" @click="openFileInputWindow">Upload</button>
+                <button type="button" class="text-white bg-[#444343] w-full py-2" @click="openFileInputWindow">Upload</button>
                 <span class="text-red-500">{{ fileError }}</span>
                 <p class="pt-2">Chosen file: <span v-if="file != null">{{ file.name }}</span></p>
-                <input type="submit" value="submit" class="cursor-pointer">
+                <input type="submit" value="Submit" class="cursor-pointer">
             </form>
         </div>
-    </div> -->
+    </div>
 
     <div v-if="uploadRecordingPopup" class="absolute z-10 bg-[rgba(0,0,0,0.8)] w-full h-dvh">
         <div class="p-5 bg-white text-black w-[400px] rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
