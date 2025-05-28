@@ -117,7 +117,8 @@ def getSummary(request):
 
 @api_view(['POST'])
 def templateUpload(request):
-
+    user = request.user.id
+    session_id = request.data.get('session_id')
 
     if request.method=="POST":
         template=uploadTemplates(request.POST,request.FILES)
