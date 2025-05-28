@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+from django.utils.text import slugify
 from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
@@ -22,10 +23,19 @@ class Users(AbstractUser):
     password = models.CharField(max_length=128)
 
 class StatementTemplates(models.Model):
-    slug = models.SlugField(unique=True, max_length=250)
+    id = models.IntegerField(primary_key=True)
+    slug = models.SlugField(unique=True, max_length=250,blank=True)
     name = models.CharField(max_length=250)
     template_path = models.FileField(upload_to='templates/', blank=True, null=True)
+    
+    def save(self,*args, **kwargs):
+        self.slug=slugify(self.name)
+        super().save(*args,**kwargs)
 
+    def __str__(self):
+        return self.name
+    class Meta:
+        unique_together=('name','slug')
 class Sessions(models.Model):
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
     template_id = models.ForeignKey(StatementTemplates, null=True, on_delete=models.CASCADE)

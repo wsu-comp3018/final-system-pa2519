@@ -43,7 +43,6 @@ def extract_structured_data(text):
     phone_match = re.search(r"phone(?: number)?(?: is|:)?\s*([\d\s\-\+\(\)]{7,})", text, re.IGNORECASE)
     data["phone"] = phone_match.group(1).strip() if phone_match else "Unknown"
 
-
     # Email
     email_match = re.search(r"email(?: address)?(?: is|:)?\s*([\w\.-]+@[\w\.-]+\.\w+)", text, re.IGNORECASE)
     data["email"] = email_match.group(1).strip() if email_match else "Unknown"
@@ -54,7 +53,6 @@ def extract_structured_data(text):
         data["occupation"] = occupation_match.group(1).strip()
     else:
         data["occupation"] = "Unknown"
-
 
     # Date (date of statement or report)
     date_match = re.search(r"date(?: is|:)?\s*([\d]{1,2} [A-Za-z]+ \d{4})", text, re.IGNORECASE)
@@ -88,6 +86,14 @@ def extract_structured_data(text):
     # Incident description (reuse injuries or fallback)
     data["incident_description"] = data["injuries"][0] if data["injuries"] else "an unexpected incident"
     data["injury_details"] = "; ".join(data["injuries"]) if data["injuries"] else "minor discomfort"
+
+    # Weather
+    weather_match = re.search(r"(weather|sunny|rain)\s+([\w ]+):\s*((?:(?!\.\s*[\w ]+:).)+\.)", text, re.IGNORECASE)
+    data["weather"] = weather_match.group(3).strip() if weather_match else "Unknown"
+
+    # Evidence
+    evidence_match = re.search(r"(?:proof|evidence)\s*:\s*((?:(?!\.\s*[\w ]+:).)+\.)", text, re.IGNORECASE)
+    data["evidence"] = evidence_match.group(1).strip() if evidence_match else "Unknown"
 
     return data
 
