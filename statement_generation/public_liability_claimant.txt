@@ -124,6 +124,7 @@ Witnesses
 Conditions 
 
 Weather 
+Weather conditions include {{ weather }}.
 
 Visibility 
 
