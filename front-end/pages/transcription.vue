@@ -423,8 +423,6 @@
 
 <template>
 
-    <!-- <p @click="test" class="bg-gray-500 cursor-pointer w-fit">test</p> -->
-
     <div class="flex h-[calc(100%-61.5px)]">
         <!-- sidebar -->
         <div class="flex flex-col w-[230px] bg-[#222222] relative overflow-hidden">
