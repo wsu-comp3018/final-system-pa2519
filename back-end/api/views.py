@@ -8,7 +8,12 @@ from summariser.views import summaryFunction
 import zipfile
 import os
 from django.http import FileResponse
-
+from rest_framework.permissions import IsAuthenticated
+# from .serializers import StatementTemplateSerializer
+from rest_framework import viewsets
+from .forms import uploadTemplates
+from django.shortcuts import render
+from django.http import JsonResponse
 
 ph = argon2.PasswordHasher()
 model = whisper.load_model("base")
@@ -232,7 +237,20 @@ def uploadRecordings(request):
 #         print("error")
 #         return Response(status=500)
 
+@api_view(['POST'])
+def templateUpload(request):
 
+
+    if request.method=="POST":
+        template=uploadTemplates(request.POST,request.FILES)
+        if template.is_valid():
+            template.save()
+
+            return Response({"message": "File Upload Successful!"},status=201)
+        return Response({"error": "Error! Problem in uploading!"}, status=400)
+    
+
+        
 
 @api_view(['POST'])
 def transcribe(request):

@@ -1,0 +1,22 @@
+{
+  "name": "final-system-pa2519",
+  "version": "1.0.0",
+  "description": "A tool to write statements in real time as an interview with a witness is taking place either face to face, or remotely. This tool would have utility for any type of investigative field that involves the collection of statements, affidavits or Stat Decs including insurance, policing, legal.",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wsu-comp3018/final-system-pa2519.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/wsu-comp3018/final-system-pa2519/issues"
+  },
+  "homepage": "https://github.com/wsu-comp3018/final-system-pa2519#readme"
+}
