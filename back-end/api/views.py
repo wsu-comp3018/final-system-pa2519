@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 import whisper
 from summariser.views import summaryFunction
 from rest_framework.permissions import IsAuthenticated
-from .serializers import StatementTemplateSerializer
+# from .serializers import StatementTemplateSerializer
 from rest_framework import viewsets
 from .forms import uploadTemplates
 from django.shortcuts import render
