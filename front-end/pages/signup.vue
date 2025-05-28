@@ -112,22 +112,20 @@
             return;
         }
 
-        $api.post('http://localhost:8000/api/createAccount/', {
+        $api.post('http://localhost:8000/api/create-account/', {
             fname: form.input.fname,
             lname: form.input.lname,
             email: form.input.email,
             password: form.input.password,
-        })
+        }, {withCredentials: true})
         .then((response) => {
             console.log(response);
-            if (response.status == 201) {
-                navigateTo('/login');
-            }
+            return navigateTo('/login');
         })
         .catch((error) => {
             createError.value = true;
             setTimeout(() => {
-                loginError.value = false;
+                createError.value = false;
             }, 3000);
             console.log("Error: ", error);
         })

@@ -36,15 +36,6 @@
 </style>
 
 <script setup>
-    /*
-    Account 1:
-    ahhh@guh.com
-    test1234
-
-    Account 2:
-    samtam@email.com
-    sammy
-    */
 
     const { $api } = useNuxtApp();
 
@@ -84,7 +75,6 @@
 
     const loginError = ref(false);
     const formValidation = () => {
-        console.log("Function called");
         validate_Email();
         validate_Password();
 
@@ -94,14 +84,10 @@
         $api.post("http://localhost:8000/api/login/", {
             email: form.input.email,
             password: form.input.password,
-        })
+        }, {withCredentials: true})
         .then((response) => {
-            // get token and store as cookie
-            const token = useCookie('token', {
-                maxAge: 60 * 60 * 2
-            });
-            token.value = response.data.access;
-            navigateTo('/transcription')
+            console.log(response)
+            return navigateTo('/transcription')
         })
         .catch ((error) => {
             loginError.value = true;
@@ -133,7 +119,10 @@
                     <label for="password">PASSWORD</label>
                     <input type="password" id="password" v-model="form.input.password" name="password" placeholder="Password" @blur="validate_Password">
                     <span class="text-red-500">{{ form.error.password }}</span>
-                    <button><NuxtLink class="hover:underline ">Forgot Password?</NuxtLink></button>
+
+                    <div>
+                        <button><NuxtLink class="hover:underline inline" to="/resetpassword">Forgot Password?</NuxtLink></button>
+                    </div>
 
                     <p v-if="loginError" class="text-center pt-3"><span>Email or password is incorrect</span></p>
 

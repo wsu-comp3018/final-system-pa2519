@@ -1,9 +1,11 @@
 from django.db import models
 from datetime import date
 from django.utils.text import slugify
+from django.utils.text import slugify
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
-class Users(models.Model):
+class Users(AbstractUser):
 
     ROLE_INVESTIGATOR="INVESTIGATOR"
     ROLE_INSURER="INSURER"
@@ -14,7 +16,6 @@ class Users(models.Model):
         (ROLE_LEGAL_TEAM, "Legal Team"),
     ]
 
-    id = models.IntegerField(primary_key=True)
     first_name = models.CharField(max_length=250)
     last_name = models.CharField(max_length=250)
     email = models.CharField(max_length=250)
@@ -37,13 +38,12 @@ class StatementTemplates(models.Model):
     class Meta:
         unique_together=('name','slug')
 class Sessions(models.Model):
-    id = models.IntegerField(primary_key=True)
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
     template_id = models.ForeignKey(StatementTemplates, null=True, on_delete=models.CASCADE)
     session_name = models.CharField(max_length=250)
     session_date = models.DateField(default=date.today)
     transcription = models.TextField(blank=True, null=True)
-    summarisation = models.TextField(blank=True, null=True)
+    summary = models.TextField(blank=True, null=True)
 
 class Audits(models.Model):
     EVENT_CREATED="CREATED"
@@ -55,7 +55,6 @@ class Audits(models.Model):
         (EVENT_DELETED, "deleted"),
     ]
 
-    id = models.IntegerField(primary_key=True)
     auditable_type = models.TextField()
     auditable_id = models.IntegerField()
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
@@ -66,10 +65,10 @@ class Audits(models.Model):
 
 
 class Interviewees(models.Model):
-    id = models.IntegerField(primary_key=True)
     first_name = models.CharField(max_length=250)
     last_name = models.CharField(max_length=250)
     session_id = models.ForeignKey(Sessions, null=True, on_delete=models.CASCADE)
+    email = models.CharField(max_length=250)
 
 # class Cases(models.Model):
 #     id = models.IntegerField(primary_key=True)
@@ -84,20 +83,17 @@ class Interviewees(models.Model):
  
 
 class Statements(models.Model):
-    id = models.IntegerField(primary_key=True)
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
-    interviewee_id = models.ForeignKey(Interviewees, null=True, on_delete=models.SET_NULL)
+    interviewee_id = models.ForeignKey(Interviewees, null=True, on_delete=models.CASCADE)
     statement_content = models.TextField(null=True, blank=True)
+    date_created = models.DateField(default=date.today)
 
  
 class AudioRecordings(models.Model):
-    id = models.IntegerField(primary_key=True)
     session_id = models.ForeignKey(Sessions, on_delete=models.CASCADE)
     audio_name = models.CharField(max_length=250)
-    length = models.DurationField()
-    size = models.IntegerField()
+    length = models.DurationField(blank=True, null=True)
+    size = models.IntegerField(blank=True, null=True)
     audio_path = models.FileField(upload_to='audio/', blank=True, null=True)
-    # audio_path=models.TextField(blank=True, null=True)
-    #comment
  
 

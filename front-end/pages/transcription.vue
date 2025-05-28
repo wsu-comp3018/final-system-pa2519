@@ -4,8 +4,9 @@
         border-color: #6b7280;
         width: 100%;
         height: 40px;
-        
-        padding: 24px 0 24px 0;
+        border: none;
+        border-bottom: 2px solid;
+        padding: 20px 0 20px 0;
         text-indent: 16px;
     }
 
@@ -27,25 +28,29 @@
             client_fname: '',
             client_lname: '',
             session_Name: '',
+            client_email: '',
         }
     })
-    let currentSessionID = ref(null);
+    const currentSessionID = ref(null);
+    const currentSessionName = ref('');
     const emptyError = ref(false);
     const creationError = ref(false);
-    let isNewSession = ref(false);
     const transcription = ref("");
-    const summary = ref("");
+    const summaryPoints = ref([]);
     const { $api } = useNuxtApp();
+    const hideSummary = ref(false);
+    const generationButtonText = ref('Generate Statement');
 
 
     const closePopups = (event) => {
         if (event.key === 'Escape') {
             isNewSession.value = false;
-            uploadMenu.value = false;
+            uploadTemplatePopup.value = false;
 
             form.input.client_fname = '';
             form.input.client_lname = '';
             form.input.session_Name = '';
+            form.input.client_email = '';
 
             file.value = [];
         }
@@ -57,9 +62,9 @@
     
     const sessionList = ref([]);
     const getSessions = () => {
-        $api.get('http://localhost:8000/api/getSessionList/')
+        $api.get('http://localhost:8000/api/session-list/', {withCredentials: true})
         .then((response) => {
-            console.log(response.data.data)
+            console.log(response.data.data);
             sessionList.value = response.data.data;
         })
         .catch((error) => {
@@ -69,31 +74,71 @@
     getSessions();
     
     const callSummariser = () => {
+        hideSummary.value = true;
+
         $api.post('http://localhost:8000/api/summary/', {
             session_id: currentSessionID.value,
-        })
+        }, {withCredentials: true})
         .then ((response) => {
-            console.log(response.data.Summary);
-            summary.value = response.data.Summary;
+            console.log(response.data.summary);
+            if (response.data.summary) {
+                summaryPoints.value = response.data.summary.match(/[^.!]+[.!]/g);
+            }
+            hideSummary.value = false;
+
+            getSessions();
             
         })
         .catch((error) => {
+            errorMessage.value = "An error occur during summarisation."
+            displayErrorMessage();
             console.log(error);
+            hideSummary.value = false;
+        })
+    }
+
+    const callStatementGenerator = () => {
+        generationButtonText.value = 'Generating...';
+
+        if (transcription.value === '') {
+            console.log("No transcription");
+            return;
+        }
+
+        $api.post('http://localhost:8000/api/generate/', {
+            session_id: currentSessionID.value,
+        }, {withCredentials: true})
+        .then (async (response) => {
+            console.log(response.data.statement_id);
+            const id = response.data.statement_id
+            if (!id) {
+                generationButtonText.value = 'Generate Statement';
+                return;
+            }
+            generationButtonText.value = 'Generate Statement';
+            await navigateTo(`/review/${id}`)
+        })
+        .catch((error) => {
+            generationButtonText.value = 'Generate Statement';
+            errorMessage.value = "An error occur during generation."
+            displayErrorMessage();
+            console.log('Error', error);
         })
     }
 
     const createSession = () => {
         emptyError.value = false;
-        if (form.input.client_fname === '' || form.input.client_lname === '' || form.input.session_Name === '') {
+        if (form.input.client_fname === '' || form.input.client_lname === '' || form.input.session_Name === '' || form.input.client_email === '') {
             emptyError.value = true;
             return;
         }
 
-        $api.post('http://localhost:8000/api/createSession/', {
+        $api.post('http://localhost:8000/api/create-session/', {
             fname: form.input.client_fname,
             lname: form.input.client_lname,
-            session_Name: form.input.session_Name,
-        })
+            session_name: form.input.session_Name,
+            email: form.input.client_email,
+        }, {withCredentials: true})
         .then((response) => {
             console.log(response);
             if (response.status == 200) {
@@ -101,6 +146,7 @@
                 form.input.client_fname = '';
                 form.input.client_lname = '';
                 form.input.session_Name = '';
+                form.input.client_email = '';
             }
             getSessions();
 
@@ -115,9 +161,9 @@
     }
 
     const deleteSession = (id) => {
-        $api.post('http://localhost:8000/api/deleteSession/', {
+        $api.post('http://localhost:8000/api/delete-session/', {
             session_id: id,
-        })
+        }, {withCredentials: true})
         .then((response) => {
             getSessions();
             currentSessionID.value = null;
@@ -131,27 +177,51 @@
         currentSessionID.value = id;
         sessionList.value.forEach(item => {
             if (item.id === id) {
-                transcription.value = item.transcription;
-                summary.value = item.summarisation;
-
+                if (item.transcription) {
+                    transcription.value = item.transcription;
+                } else {
+                    transcription.value = "";
+                }
+                if (item.summary) {
+                    summaryPoints.value = item.summary.match(/[^.!]+[.!]/g);
+                } else {
+                    summaryPoints.value = [];
+                }
+                currentSessionName.value = item.session_name;
+                //summary.value = item.summary;
             }
+            console.log(summaryPoints.value)
         });
         console.log(currentSessionID.value);
     }
 
-    const toggleSessionForm = () => {
-        isNewSession.value = !isNewSession.value;
 
-        form.input.client_fname = '';
-        form.input.client_lname = '';
-        form.input.session_Name = '';
-    } 
+    let isNewSession = ref(false);
+    let uploadTemplatePopup = ref(false);
+    const toggleMenus = (menuType) => {
+        if (menuType === 'session') {
+            isNewSession.value = !isNewSession.value;
 
-    let uploadMenu = ref(false);
-    const toggleUploadMenu = () => {
-        uploadMenu.value = !uploadMenu.value;
+            form.input.client_fname = '';
+            form.input.client_lname = '';
+            form.input.session_Name = '';
+            form.input.client_email = '';
+
+        } else if (menuType === 'upload') {
+            uploadTemplatePopup.value = !uploadTemplatePopup.value
+        }
     }
 
+    const errorMessage = ref('');
+    const errorPopup = ref(false);
+    const displayErrorMessage = () => {
+        errorPopup.value = true;
+        setTimeout(() => {
+            errorPopup.value = false;
+        }, 3000);
+    }
+
+    // Functions to open UI and upload templates NOTE: IGNORE FOR NOW.
     const inputFile = useTemplateRef('fileInput');
     const openFileInputWindow = () => {
         inputFile.value.click();
@@ -172,7 +242,7 @@
             const template = new FormData();
             template.append('template', file.value);
 
-            $api.post("http://localhost:8000/api/upload/template/", template)
+            $api.post("http://localhost:8000/api/upload/template/", template, {withCredentials: true})
             .then((response) => {
                 console.log(response);
             })
@@ -182,14 +252,15 @@
         }
     }
 
-
-
+    // Functions to enable microphone and recording
     let recordingStatus = false;
     let recordingEnabled = ref(false);
     let fullRecording = [];
     let chunk = [];
     let fullRecorder = null;
     let chunkRecorder = null;
+    const uploadRecordingPopup = ref(false);
+    let fullRecordingBlob = null;
 
     function Setup() {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -203,15 +274,15 @@
 
                     fullRecorder.ondataavailable = (event) => {
                         fullRecording.push(event.data);
-                        const blob = new Blob(fullRecording, {type: "audio/mp4"});
+                        fullRecordingBlob = new Blob(fullRecording, {type: "audio/wav"});
                         fullRecording = [];
-                        //sendFullAudioRecording(blob)
+                        uploadRecordingPopup.value = true;
                     }
 
 
                     chunkRecorder.ondataavailable = (event) => {
                         chunk.push(event.data);
-                        const blob = new Blob(chunk, {type: "audio/mp4"});
+                        const blob = new Blob(chunk, {type: "audio/wav"});
                         chunk = [];
                         request_Transcription(blob);
                     }
@@ -223,7 +294,7 @@
                     recordingStatus = true;
                 })
                 .catch ((err) => {
-                    console.error(err);
+                    console.error('Error:', err);
                 });
         }
     }
@@ -255,7 +326,7 @@
         console.log(recordingEnabled.value);
     }
 
-
+    // Function to get transcription from whisper
     const request_Transcription = (chunkBlob) => {
         const formData = new FormData();
         formData.append("audio", chunkBlob);
@@ -263,46 +334,104 @@
 
         console.log("Requesting for ", currentSessionID.value);
         
-        $api.post('http://localhost:8000/api/transcribe/', formData)
+        $api.post('http://localhost:8000/api/transcribe/', formData, {withCredentials: true})
         .then((response) => {
             if (response.data.transcription != "") {
                 console.log(response.data);
                 transcription.value += response.data.transcription;
+                getSessions();
             }
         })
         .catch((error) => {
+            enableMicrophone();
+            errorMessage.value = "An error occured during transcribing. Please try again."
+            displayErrorMessage();
             console.log(error);
         })
     }
 
-    const sendFullAudioRecording = (audioBlob) => {
-        const fullAudio = new FormData();
-        fullAudio.append("fullAudio", audioBlob);
+    const recordingName = reactive({
+        name: '',
+    })
+    const confirmRecordingUpload = (answer) => {
+        if (answer === 'Yes') {
+            uploadRecordingPopup.value = false;
+            sendFullAudioRecording(fullRecordingBlob);
+        } else {
+            uploadRecordingPopup.value = false;
+            return;
+        }
+    }
 
-        $api.post("http://localhost:8000/api/upload/recording/")
+    // Function to upload full audio recording to backend NOTE: IGNORE FOR NOW PLEASE.
+    const sendFullAudioRecording = (audioBlob) => {
+        const formData = new FormData();
+        const filename = recordingName.name + '.wav';
+        console.log(filename)
+        formData.append("fullRecording", audioBlob, filename);
+        formData.append("session_id", currentSessionID.value);
+        formData.append("audio_name", recordingName.name);
+
+        $api.post("http://localhost:8000/api/upload-recording/", formData, {withCredentials: true})
         .then ((response) => {
             console.log(response);
-            //callSummariser();
         })
         .catch((error) => {
             console.log("Error", error);
         })
     }
 
+    // Works but cannot but issue with downloaded file
+    // const downloadRecording = () => {
+    //     $api.post('http://localhost:8000/api/downloadRecording/', {
+    //         session_id: currentSessionID.value,
+    //         responseType: 'blob',
+    //     })
+    //     .then((response) => {
+    //         console.log(response);
+    //         const blob = new Blob([response.data], {type: 'application/zip'});
+    //         var url = window.URL.createObjectURL(blob);
+    //         var a = document.createElement('a');
+    //         document.body.appendChild(a);
+    //         a.style = "display: none;";
+
+    //         a.href = url;
+    //         a.download = 'AudioRecordings';
+    //         a.click();
+
+    //         document.body.removeChild(a);
+    //         window.URL.revokeObjectURL(url);
+    //     })
+    //     .catch((error) => {
+    //         console.log(error);
+    //     })
+    // }
+
+        const test = () => {
+            $api.post('http://localhost:8000/api/test/')
+            .then((response) => {
+                console.log(response)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        }
+
 </script>
 
 
 <template>
+
+    <p @click="test" class="bg-gray-500 cursor-pointer w-fit">test</p>
+
     <div class="flex h-[calc(100%-61.5px)]">
 
-        <div class="flex flex-col w-[230px] bg-[#444444] relative overflow-hidden">
+        <!-- sidebar -->
+        <div class="flex flex-col w-[230px] bg-[#222222] relative overflow-hidden">
             <div class="py-4 grow overflow-hidden">
-                <div class="text-center font-bold text-[25px] underline">
-                    <h1>Sessions</h1>
-                </div>
                 <div class="flex-grow px-2 max-h-full overflow-y-auto">
-                    <div v-for="item in sessionList" class="flex items-center truncate text-[15px] px-2 py-1 transition cursor-pointer hover:bg-neutral-600">
-                        <h2 class="truncate w-[60%]" @click="updateLocalSessionView(item.id)">{{ item.session_name }}</h2>
+                    <div v-for="item in sessionList" class="flex items-center truncate text-[18px] px-2 py-1 transition cursor-pointer hover:bg-neutral-600">
+                        <h2 class="truncate w-full" @click="updateLocalSessionView(item.id)">{{ item.session_name }}</h2>
                         <div class="grow flex items-center justify-end">
                             <Icon @click="deleteSession(item.id)" size="20px" name="material-symbols-light:delete-outline"/>
                         </div>
@@ -310,44 +439,20 @@
                 </div>
             </div>
 
-            <div class="py-5 flex items-center gap-3 w-full cursor-pointer" @click="toggleSessionForm">
+            <div class="py-5 px-3 flex items-center gap-3 w-full cursor-pointer" @click="toggleMenus('session')">
                 <Icon size="35px" name="material-symbols:add"/>
                 <p class="text-[20px]">New session</p>
             </div>
         </div>
-        
-        <!-- displays a popup to allow user to fill basic info such as client details and name for session, when user clicks new session-->
-        <div v-if="isNewSession" class="absolute z-10 bg-[rgba(0,0,0,0.8)] text-white w-full h-full">
-            <div class="p-5 bg-white text-black w-[300px] rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <Icon class="absolute right-0 top-0 mt-2 mr-2 cursor-pointer" size="20px" name="gridicons:cross" @click="toggleSessionForm"/>
-                <h1 class="text-[20px] text-center">Enter client details</h1>
-                <form class="w-full" @submit.prevent="createSession">
-                    <label for="fname">First Name</label>
-                    <input type="text" id="fname" v-model="form.input.client_fname" name="email" placeholder="First Name">
-
-                    <label for="lname">Last Name</label>
-                    <input type="text" id="lname" v-model="form.input.client_lname" name="lname" placeholder="Last Name">
-
-                    <label for="session">Session Name (has to be unique)</label>
-                    <input type="text" id="session" v-model="form.input.session_Name" name="session" placeholder="Session Name">
-
-                    <p v-if="emptyError" class="text-center pt-3"><span>Please fill all fields</span></p>
-                    <p v-if="creationError" class="text-center pt-3"><span>Please type a unique session name</span></p>
-
-                    <div class="text-center pt-3">
-                        <input type="submit" value="Submit" class="cursor-pointer">
-                    </div>
-                </form>
-            </div>
-        </div>
 
         <!-- Displays the transcriptions, summary and the functions under these panels -->
-        <div v-if="currentSessionID == null " class="flex w-full items-center text-center">
-            <p class="grow">Choose a session to get started</p>
+        <div v-if="currentSessionID == null " class="flex grow items-center text-center">
+            <p class="grow">Create or select a session to get started.</p>
         </div>
-        <div v-else class="flex w-full">
-            <div class="w-full">
-                <div class="flex justify-center py-5 h-5/6 text-black">
+        <div v-else class="flex w-[calc(100%-230px)]">
+            <div class="w-full h-[calc(100%-42px)]">
+                <h1 class="ml-3 text-[28px] underline">Current session - {{ currentSessionName }}</h1>
+                <div class="flex justify-center pb-5 h-5/6 text-black ">
                     <div class="w-full bg-white rounded-xl overflow-hidden mx-3">
                         <h2 class="text-center bg-[#222222] text-white p-3 text-[20px]">Transcribed Text</h2>
                         <p class="h-[calc(100%-54px)] px-2 overflow-y-auto overflow-hidden">{{ transcription }}</p>
@@ -355,18 +460,28 @@
 
                     <div class="w-full bg-white rounded-xl overflow-auto mx-3">
                         <h2 class="text-center bg-[#222222] text-white p-3 text-[20px]">Summary</h2>
-                        <p class="h-[calc(100%-54px)] px-2 overflow-y-auto overflow-hidden">{{ summary }}</p>
+                        <div v-if="hideSummary" class="h-[calc(100%-54px)] flex items-center justify-center">
+                            <p>Summarising please wait...</p>
+                        </div>
+                        <div class="h-[calc(100%-54px)] overflow-y-auto overflow-hidden pr-2">
+                            <ul class="list-disc list-outside pl-6">
+                                <li v-for="line in summaryPoints">{{ line }}</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                     
                 <div class="flex justify-center gap-3 text-[30px] mx-3">
                     <div class="flex items-center p-4 bg-[#222222] space-x-6 rounded-xl">
                         <Icon size="37px" class="cursor-pointer" name="fluent:mic-record-20-regular" @click="enableMicrophone"/>
-                        <Icon size="37px" class="cursor-pointer" name="material-symbols:upload-file-outline" @click="toggleUploadMenu"/>
+                        <Icon size="37px" class="cursor-pointer" name="material-symbols:upload-file-outline" @click="toggleMenus('upload')"/>
+                        <Icon size="37px" class="cursor-pointer" name="material-symbols:cloud-download-outline"/>
                     </div>
                     <div class="p-4 bg-[#222222] rounded-xl">
-                        <button @click="callSummariser">Generate Statement</button>
-                        
+                        <button @click="callSummariser">Summarise</button>
+                    </div>
+                    <div class="p-4 bg-[#222222] rounded-xl">
+                        <button @click="callStatementGenerator">{{ generationButtonText }}</button>
                     </div>
                 </div>
             </div>
@@ -374,10 +489,39 @@
 
     </div>
 
+    <!-- displays a popup to allow user to fill basic info such as client details and name for session, when user clicks new session-->
+    <div v-if="isNewSession" class="absolute z-10 bg-[rgba(0,0,0,0.8)] w-full h-dvh">
+        <div class="p-5 bg-white text-black w-[300px] rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <Icon class="absolute right-0 top-0 mt-2 mr-2 cursor-pointer" size="20px" name="gridicons:cross" @click="toggleMenus('session')"/>
+            <h1 class="text-[20px] text-center">Enter client details</h1>
+            <form class="w-full" @submit.prevent="createSession">
+                <label for="fname">First Name</label>
+                <input type="text" id="fname" v-model="form.input.client_fname" name="email">
+
+                <label for="lname">Last Name</label>
+                <input type="text" id="lname" v-model="form.input.client_lname" name="lname">
+
+                <label for="email">Email Address</label>
+                <input type="email" id="email" v-model="form.input.client_email" name="email">
+
+                <label for="session">Session Name (has to be unique)</label>
+                <input type="text" id="session" v-model="form.input.session_Name" name="session">
+
+                <p v-if="emptyError" class="text-center pt-3"><span>Please fill all fields</span></p>
+                <p v-if="creationError" class="text-center pt-3"><span>Please type a unique session name</span></p>
+
+                <div class="text-center pt-3">
+                    <input type="submit" value="Submit" class="bg-[#222222] text-white hover:underline px-3 py-1 rounded-md cursor-pointer">
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- A menu will pop up to allow users to upload templates (hidden for now) -->
+    <!-- <div v-if="uploadTemplateMenu" class="absolute z-10 bg-[rgba(0,0,0,0.8)] text-white w-full h-dvh">
     <!--<div v-if="uploadMenu" class="absolute z-10 bg-[rgba(0,0,0,0.8)] text-white w-full h-dvh">
         <div class="p-5 bg-white text-black w-[300px] rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-            <Icon class="absolute right-0 top-0 mt-2 mr-2 cursor-pointer" size="20px" name="gridicons:cross" @click="toggleUploadMenu"/>
+            <Icon class="absolute right-0 top-0 mt-2 mr-2 cursor-pointer" size="20px" name="gridicons:cross" @click="toggleMenus('upload')"/>
 
             <h1 class="text-[20px]">Upload a template</h1>
             <form method="post" @submit.prevent="fileSubmit">
@@ -389,5 +533,22 @@
             </form>
         </div>
     </div> -->
+
+    <div v-if="uploadRecordingPopup" class="absolute z-10 bg-[rgba(0,0,0,0.8)] w-full h-dvh">
+        <div class="p-5 bg-white text-black w-[400px] rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+            <Icon class="absolute right-0 top-0 mt-2 mr-2 cursor-pointer" size="20px" name="gridicons:cross" @click="confirmRecordingUpload('No')"/>
+            <p>Do you want to upload this recording to the server? If so enter a name for this recording.</p>
+            <input class="bg-white my-2" v-model="recordingName.name" type="text">
+            <div class="flex justify-center gap-4 pt-3">
+                <button class="bg-[#222222] text-white hover:underline px-3 py-1 rounded-md" @click="confirmRecordingUpload('Yes')">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div v-if="errorPopup" class="absolute z-10 bg-[rgba(0,0,0,0.8)] w-full h-full">
+        <div class="p-5 text-white w-[400px] rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+            <p>{{ errorMessage }}</p>
+        </div>
+    </div>
     
 </template>

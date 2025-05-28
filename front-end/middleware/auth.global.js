@@ -1,14 +1,14 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-    const isToken = useCookie('token');
-    if (!isToken.value && (to.path === '/' || to.path === '/signup')) {
+    const isToken = useCookie('api_token');
+    if (!isToken.value && (to.path === '/' || to.path === '/signup' || to.path === '/login' || to.path === '/resetpassword')) {
         return;
     }
 
     if (!isToken.value && to.path !== '/login') {
-        return navigateTo('/login')
+        return navigateTo('/')
     }
 
-    if (isToken.value && to.path === '/login') {
+    if (isToken.value && to.path === '/login' || to.path === '/signup' || to.path === '/resetpassword') {
         return navigateTo('/transcription')
     }
 }) 
