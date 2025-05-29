@@ -135,7 +135,7 @@
 
 <template>
     
-    <div class="m-auto">
+    <div class=" m-auto">
 
         <div class="w-[550px] bg-[#222222] rounded-xl">
 

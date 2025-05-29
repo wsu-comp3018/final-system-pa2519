@@ -104,7 +104,7 @@
 
 <template>
     
-    <div class="mx-auto p-10">
+    <div class="m-auto p-10">
         <h1 class="flex justify-center text-[60px]"><b>WELCOME</b></h1>
 
         <div class="w-[450px] bg-[#222222] rounded-xl p-10">

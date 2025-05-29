@@ -14,7 +14,7 @@
     
     <div class="h-full p-8">
         
-        <div class="text-center w-[68%] mx-auto">
+        <div class="text-center w-[800px] m-auto">
             <header>
                 <h1 class="font-bold text-[60px]">
                     Save time, reduce effort.

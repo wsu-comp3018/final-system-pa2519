@@ -34,7 +34,7 @@
         } else {
             enable.value.contentEditable = 'false';
             iconColor.value = "black";
-            console.log('guh', enable.value.innerText)
+            //console.log('guh', enable.value.innerText)
             saveChanges();
         }
 
@@ -117,9 +117,8 @@
             </div>
 
             <div class="bg-white border-[5px] border-[#555656] h-fit flex flex-col my-auto">
-                <Icon @click="toggleEdit('true')" :style="{color: iconColor}" class="inline-block mx-3 my-5 cursor-pointer" size="60px" name="material-symbols:edit-outline"/>
-                <Icon class="text-black inline-block mx-3 my-5 cursor-pointer" size="60px" name="gridicons:cross" @click="showConfirmPopup"/>
-                <Icon class="text-black inline-block mx-3 my-5 cursor-pointer" size="60px" name="ri:save-3-line"/>
+                <Icon @click="toggleEdit('true')" :style="{color: iconColor}" class="inline-block mx-3 my-5 cursor-pointer" size="65px" name="material-symbols:edit-outline"/>
+                <Icon class="text-black inline-block mx-3 my-5 cursor-pointer" size="65px" name="gridicons:cross" @click="showConfirmPopup"/>
             </div>
         </div>
 

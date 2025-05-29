@@ -46,6 +46,7 @@
     const hideSummary = ref(false);
     const generationButtonText = ref('Generate Statement');
     const summaryButtonText = ref('Summarise')
+    const micColor = ref("white");
 
 
     const closePopups = (event) => {
@@ -337,17 +338,18 @@
         if (recordingEnabled.value) {
             fullRecorder.start();
             chunkRecorder.start();
-            
+            micColor.value = "red";
 
             intervalID = setInterval(() => {
-                    chunkRecorder.stop();
-                    chunkRecorder.start();
+                chunkRecorder.stop();
+                chunkRecorder.start();
             }, 4000);
 
         } else {
             clearInterval(intervalID);
             fullRecorder.stop();
             chunkRecorder.stop();
+            micColor.value = "white";
         }
 
         console.log(recordingEnabled.value);
@@ -431,7 +433,7 @@
                     <h1>Your sessions</h1>
                 </div>
                 <div class="flex-grow max-h-full overflow-y-auto">
-                    <div v-for="item in sessionList" class="flex items-center truncate text-[18px] py-1 transition cursor-pointer hover:bg-neutral-600">
+                    <div v-for="item in sessionList" class="flex items-center truncate text-[16px] py-1 transition cursor-pointer hover:bg-neutral-600">
                         <h2 class="truncate w-full" @click="updateLocalSessionView(item.id)">{{ item.session_name }}</h2>
                         <div class="grow flex items-center justify-end">
                             <Icon @click="deleteSession(item.id)" size="20px" name="material-symbols-light:delete-outline"/>
@@ -474,7 +476,7 @@
                     
                 <div class="flex justify-center gap-3 text-[30px] mx-3">
                     <div class="flex items-center p-4 bg-[#222222] space-x-6 rounded-xl">
-                        <Icon size="37px" class="cursor-pointer" name="fluent:mic-record-20-regular" @click="enableMicrophone"/>
+                        <Icon size="37px" class="cursor-pointer" :style="{color: micColor}" name="fluent:mic-record-20-regular" @click="enableMicrophone"/>
                         <Icon size="37px" class="cursor-pointer" name="material-symbols:upload-file-outline" @click="toggleMenus('templates')"/>
                     </div>
                     <div class="p-4 bg-[#222222] rounded-xl">
@@ -532,10 +534,10 @@
                 </select>
                 <p class="py-3">OR</p>
                 <input ref="fileInput" @change="getFile" type="file" name="template" id="template" class="hidden">
-                <button type="button" class="text-white bg-[#444343] w-full py-2" @click="openFileInputWindow">Upload</button>
+                <button type="button" class="text-white bg-[#444343] w-full py-2 rounded-sm" @click="openFileInputWindow">Upload</button>
                 <span class="text-red-500">{{ fileError }}</span>
                 <p class="pt-2">Chosen file: <span v-if="file != null">{{ file.name }}</span></p>
-                <input type="submit" value="Submit" class="cursor-pointer">
+                <input type="submit" value="Submit" class="bg-[#222222] text-white hover:underline px-3 py-1 rounded-md cursor-pointer">
             </form>
         </div>
     </div>
