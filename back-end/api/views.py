@@ -762,7 +762,7 @@ def uploadRecordings(request):
 #         return Response(status=500)
 
 @api_view(['POST'])
-def templateUpload(request):
+def uploadTemplates(request):
 
 
     if request.method=="POST":
