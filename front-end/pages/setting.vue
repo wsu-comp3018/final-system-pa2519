@@ -84,14 +84,14 @@
         }
 
         if(form.current_password && form.new_password === '') {
-            updateErrorMessage.value = "Current password empty."
+            updateErrorMessage.value = "New password empty."
             passwordError.value = true;
             setTimeout(() => {
                 passwordError.value = false;
             }, 3000);
             return;
         } else if (form.current_password === '' && form.new_password) {
-            updateErrorMessage.value = "New password empty"
+            updateErrorMessage.value = "Current password empty"
             passwordError.value = true;
             setTimeout(() => {
                 passwordError.value = false;
@@ -105,6 +105,7 @@
             new_password: form.new_password,
         }, {withCredentials: true})
         .then((response) => {
+            resetChanges();
             updateSuccessful.value = true;
             setTimeout(() => {
                 updateSuccessful.value = null;
@@ -133,7 +134,8 @@
         form.new_password = '';
 
         if (changeEmail.value === true) {
-            enableChangeEmail();
+            changeEmail.value = false;
+            getAccountSettings();
         }
     }
 

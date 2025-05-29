@@ -70,19 +70,14 @@
     const getSessions = () => {
         $api.get('http://localhost:8000/api/session-list/', {withCredentials: true})
         .then((response) => {
-            console.log(response.data.data);
             sessionList.value = response.data.data;
-        })
-        .catch((error) => {
-            console.log(error);
-        })  
+        }) 
     }   
     getSessions();
     
     const callSummariser = () => {
 
         if (transcription.value === '') {
-            console.log("No transcription");
             summaryButtonText.value = 'No transcription available';
             setTimeout(() => {
                 summaryButtonText.value = 'Summarise';
@@ -96,7 +91,6 @@
             session_id: currentSessionID.value,
         }, {withCredentials: true})
         .then ((response) => {
-            console.log(response.data.summary);
             if (response.data.summary) {
                 summaryPoints.value = response.data.summary.match(/[^.!]+[.!]/g);
             }
@@ -108,7 +102,6 @@
         .catch((error) => {
             errorMessage.value = "An error occur during summarisation."
             displayErrorMessage();
-            console.log(error);
             hideSummary.value = false;
         })
     }
@@ -117,7 +110,6 @@
         generationButtonText.value = 'Generating...';
 
         if (transcription.value === '') {
-            console.log("No transcription");
             generationButtonText.value = 'No transcription available';
             setTimeout(() => {
                 generationButtonText.value = 'Generate';
@@ -129,7 +121,6 @@
             session_id: currentSessionID.value,
         }, {withCredentials: true})
         .then (async (response) => {
-            console.log(response.data.statement_id);
             const id = response.data.statement_id
             if (!id) {
                 generationButtonText.value = 'Generate Statement';
@@ -142,7 +133,6 @@
             generationButtonText.value = 'Generate Statement';
             errorMessage.value = "An error occur during generation."
             displayErrorMessage();
-            console.log('Error', error);
         })
     }
 
@@ -160,7 +150,6 @@
             email: form.input.client_email,
         }, {withCredentials: true})
         .then((response) => {
-            console.log(response);
             if (response.status == 200) {
                 newSession.value = false;
                 form.input.client_fname = '';
@@ -176,7 +165,6 @@
             setTimeout(() => {
                 creationError.value = false;
             }, 3000);
-            console.log("Error: ", error);
         })
     }
 
@@ -189,7 +177,8 @@
             currentSessionID.value = null;
         })
         .catch((error) => {
-            console.log(error);
+            errorMessage.value = "An error occur during generation."
+            displayErrorMessage();
         })
     }
 
@@ -208,11 +197,8 @@
                     summaryPoints.value = [];
                 }
                 currentSessionName.value = item.session_name;
-                //summary.value = item.summary;
             }
-            console.log(summaryPoints.value)
         });
-        console.log(currentSessionID.value);
     }
 
 
@@ -226,7 +212,6 @@
             form.input.client_email = '';
 
         } else if (menuType === 'templates') {
-            console.log('called')
             uploadTemplatePopup.value = !uploadTemplatePopup.value;
         }
     }
@@ -253,29 +238,38 @@
 
     const fileError = ref("");
     const selected = ref(null);
-    const fileSubmit = () => {
+    const templateSubmit = () => {
         fileError.value = "";
-        console.log(selected.value);
 
-        if (selected && file.value) {
+        if (!file.value && !selected.value) {
+            fileError.value = "Select one of the options."
+            return;
+        }
+
+        if (selected.value && file.value) {
             fileError.value = "Only choose one option."
             return;
         }
         else {
-            const template = new FormData();
-            if (selected) {
-                template.append('template', selected)
+            const formData = new FormData();
+            if (selected.value) {
+                formData.append('template', selected.value);
             }
             else if(file.value) {
-                template.append('template', file.value)
+                const file_name = file.value.name.split('.')[0];
+                formData.append('file_name', file_name);
+                formData.append('template', file.value);
             }
 
-            $api.post("http://localhost:8000/api/", template, {withCredentials: true})
+            $api.post("http://localhost:8000/api/upload-template/", formData, {withCredentials: true})
             .then((response) => {
-                console.log(response);
+                selected.value = null;
+                uploadTemplatePopup.value = false;
             })
             .catch((error) => {
-                console.log("Error", error);
+                uploadTemplatePopup.value = false;
+                errorMessage.value = "An error occur during generation."
+                displayErrorMessage();      
             })
         }
     }
@@ -352,7 +346,6 @@
             micColor.value = "white";
         }
 
-        console.log(recordingEnabled.value);
     }
 
     // Function to get transcription from whisper
@@ -360,13 +353,10 @@
         const formData = new FormData();
         formData.append("audio", chunkBlob);
         formData.append("session_id", currentSessionID.value);
-
-        console.log("Requesting for ", currentSessionID.value);
         
         $api.post('http://localhost:8000/api/transcribe/', formData, {withCredentials: true})
         .then((response) => {
             if (response.data.transcription != "") {
-                console.log(response.data);
                 transcription.value += response.data.transcription;
                 getSessions();
             }
@@ -375,7 +365,6 @@
             enableMicrophone();
             errorMessage.value = "An error occured during transcribing. Please try again."
             displayErrorMessage();
-            console.log(error);
         })
     }
 
@@ -396,29 +385,19 @@
     const sendFullAudioRecording = (audioBlob) => {
         const formData = new FormData();
         const filename = recordingName.name + '.wav';
-        console.log(filename)
         formData.append("fullRecording", audioBlob, filename);
         formData.append("session_id", currentSessionID.value);
         formData.append("audio_name", recordingName.name);
 
         $api.post("http://localhost:8000/api/upload-recording/", formData, {withCredentials: true})
         .then ((response) => {
-            console.log(response);
+            return;
         })
         .catch((error) => {
-            console.log("Error", error);
+            errorMessage.value = "An error occur uploading the recording."
+            displayErrorMessage();
         })
     }
-
-        const test = () => {
-            $api.post('http://localhost:8000/api/test/')
-            .then((response) => {
-                console.log(response)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-        }
 
 </script>
 
@@ -525,7 +504,7 @@
             <Icon class="absolute right-0 top-0 mt-2 mr-2 cursor-pointer" size="20px" name="gridicons:cross" @click="toggleMenus('templates')"/>
 
             <h1 class="text-[18px]">Upload a template or select one from the dropdown</h1>
-            <form method="post" @submit.prevent="fileSubmit">
+            <form method="post" @submit.prevent="templateSubmit">
                 <select v-model="selected" class="m-0 bg-[#444343] text-white indent-3 py-2" name="template">
                     <option disable value="default">Select a template</option>
                     <option value="1">Public Liability</option>

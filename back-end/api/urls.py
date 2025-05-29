@@ -31,8 +31,8 @@ urlpatterns = [
     path('update-statement/', views.updateStatement),
     path('delete-statement/', views.deleteStatement),
     path('statement-list', views.getStatementList),
-    path('upload-recording/', views.uploadRecordings),
-    path('test/', views.test),
+    path('upload-recording/', views.uploadRecording),
+    path('upload-template/', views.templateUpload),
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
