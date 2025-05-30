@@ -34,6 +34,7 @@ def createAccount(request):
         return Response(status=409)
     except:
         userObj = Users(first_name=user_fname, last_name=user_lname, email=user_email, password=hash)
+        userObj.full_clean()
         userObj.save()
         return Response(status=status.HTTP_200_OK)
 
@@ -81,6 +82,7 @@ def updateAccountDetails(request):
             hash = ph.hash(new_password)
             userObj.password = hash
         
+        userObj.full_clean()
         userObj.save()
         return Response(status=status.HTTP_200_OK)
     except:
@@ -146,12 +148,14 @@ def createSession(request):
         checkSessionExist = Sessions.objects.get(user_id_id=user, session_name=session_Name) 
         return Response({'Error': 'Session name is not unique'}, status=status.HTTP_400_BAD_REQUEST)
     except:
+        sessionObj.full_clean()
         sessionObj.save()
         session_id = sessionObj.id
         client_fname = request.data['fname'].strip()
         client_lname = request.data['lname'].strip()
-        client_email = request.data['email'].strip
+        client_email = request.data['email'].strip()
         clientObj = Interviewees(first_name=client_fname, last_name=client_lname, session_id_id=session_id, email=client_email)
+        clientObj.full_clean()
         clientObj.save()
         return Response(status=status.HTTP_200_OK)
 
@@ -192,6 +196,7 @@ def getSummary(request):
         if text is None: # if no transcription, it will stop execution
             return Response(status=500)
         sessionObj.summary = text
+        sessionObj.full_clean()
         sessionObj.save()
         return Response({'summary': text}, status=status.HTTP_200_OK)
     except:
@@ -216,6 +221,7 @@ def generateStatement(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         statement = Statements(user_id_id=user, interviewee_id_id=clientObj.id, statement_content=text)
+        statement.full_clean()
         statement.save()
         return Response({'statement_id': statement.id}, status=status.HTTP_200_OK)
         
@@ -268,6 +274,7 @@ def updateStatement(request):
     try:
         statementObj = Statements.objects.get(id = statement_id, user_id_id = user)
         statementObj.statement_content = updated_statement
+        statementObj.full_clean()
         statementObj.save()
         return Response(status=status.HTTP_200_OK)
     except:
@@ -295,6 +302,7 @@ def uploadRecording(request):
     fullRecording = request.FILES['fullRecording']
 
     audioObj = AudioRecordings(session_id_id = sessionID, audio_name = name, audio_path = fullRecording)
+    audioObj.full_clean
     audioObj.save()
     
     return Response(status=status.HTTP_200_OK)
@@ -302,8 +310,6 @@ def uploadRecording(request):
 # 
 @api_view(['POST'])
 def templateUpload(request):
-    # permission_classes = [IsAuthenticated]
-    # return HttpResponse("hello")
 
     if request.method=="POST":
         template=uploadTemplates(request.POST,request.FILES)
@@ -343,7 +349,7 @@ def transcribe(request):
             session.transcription = result["text"]
         else:
             session.transcription += result["text"]
-        
+        session.full_clean()
         session.save()
     except:
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
