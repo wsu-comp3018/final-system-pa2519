@@ -25,23 +25,24 @@ Built with **Nuxt.js** (Vue 3)
 - npm run dev
 
 # Back-End
+Install the latest version fo python using the link below
+https://www.python.org/
+
 Install pipenv
-- pip install pipenv (if not installed)
+- pip install pipenv (pip3 on mac)
 
 Activate Virtual Environment
 - cd (change directory) into the back-end folder
 
-for Windows:
-- pipenv shell
+for Windows and Mac:
+- pipenv shell (create or load virtual environment)
 
-for Mac:
-- python3.11 -m venv venv
-- source venv/bin/activate
-
-Install dependencies 
+Install dependencies and packages
 - pipenv install
 
 This installs Django, Django REST Framework, CORS Headers, JWT Auth, Whisper, Spark NLP + Pyspark, Transformers (with Torch), Argon2, Jinja2, Numpy and hf-xet
+
+- You may be required to set your python interpretor to point to the virtual environment.
 
 **For further inquiries about how to use pipenv please refer to the link below**
 https://pipenv.pypa.io/en/latest/
