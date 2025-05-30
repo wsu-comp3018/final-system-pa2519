@@ -23,7 +23,7 @@ class Users(AbstractUser):
     password = models.CharField(max_length=128)
 
 class StatementTemplates(models.Model):
-    slug = models.SlugField(unique=True, max_length=250,blank=True)
+    slug = models.SlugField(unique=True, max_length=250,blank=True, null=True)
     name = models.CharField(max_length=250)
     template_path = models.FileField(upload_to='templates/', blank=True, null=True)
     
@@ -33,8 +33,8 @@ class StatementTemplates(models.Model):
 
     def __str__(self):
         return self.name
-    class Meta:
-        unique_together=('name','slug')
+    # class Meta:
+    #     unique_together=('name','slug')
         
 class Sessions(models.Model):
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
@@ -44,23 +44,23 @@ class Sessions(models.Model):
     transcription = models.TextField(blank=True, null=True)
     summary = models.TextField(blank=True, null=True)
 
-class Audits(models.Model):
-    EVENT_CREATED="CREATED"
-    EVENT_UPDATED="UPDATED"
-    EVENT_DELETED="DELETED"
-    EVENT_CHOICES=[
-        (EVENT_CREATED, "created"),
-        (EVENT_UPDATED, "updated"), 
-        (EVENT_DELETED, "deleted"),
-    ]
+# class Audits(models.Model):
+#     EVENT_CREATED="CREATED"
+#     EVENT_UPDATED="UPDATED"
+#     EVENT_DELETED="DELETED"
+#     EVENT_CHOICES=[
+#         (EVENT_CREATED, "created"),
+#         (EVENT_UPDATED, "updated"), 
+#         (EVENT_DELETED, "deleted"),
+#     ]
 
-    auditable_type = models.TextField()
-    auditable_id = models.IntegerField()
-    user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
-    updated_content = models.TextField(null=True, blank=True)
-    event = models.CharField(choices=EVENT_CHOICES, default=EVENT_CREATED, max_length=100)
-    old_value = models.TextField()
-    new_value = models.TextField()
+#     auditable_type = models.TextField()
+#     auditable_id = models.IntegerField()
+#     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)
+#     updated_content = models.TextField(null=True, blank=True)
+#     event = models.CharField(choices=EVENT_CHOICES, default=EVENT_CREATED, max_length=100)
+#     old_value = models.TextField()
+#     new_value = models.TextField()
 
 
 class Interviewees(models.Model):
