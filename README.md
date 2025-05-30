@@ -51,51 +51,51 @@ Run Migrations and Server
 If required, install each dependency individually with the following:
 **Django**
 
-pip install django
+- pip install django
 
 **Django REST Framework**
 
-pip install djangorestframework
+- pip install djangorestframework
 
 **Django CORS Headers**
 
-pip install django-cors-headers
+- pip install django-cors-headers
 
 **Simple JWT Authentication for DRF**
 
-pip install djangorestframework-simplejwt
+- pip install djangorestframework-simplejwt
 
 **Whisper**
 
-pip install -U openai-whisper
+- pip install -U openai-whisper
 
 **Spark NLP**
 
-pip install spark-nlp==5.5.3
+- pip install spark-nlp==5.5.3
 
 **PySpark**
 
-pip install pyspark
+- pip install pyspark
 
 **HuggingFace Transformers with Torch support**
 
-pip install "transformers[torch]"
+- pip install "transformers[torch]"
 
 **Argon2 Password Hasher**
 
-pip install argon2-cffi
+- pip install argon2-cffi
 
 **Jinja2 Template Engine**
 
-pip install jinja2
+- pip install jinja2
 
 **NumPy**
 
-pip install numpy
+- pip install numpy
 
 **HuggingFace Xet (hf-xet)**
 
-pip install hf-xet
+- pip install hf-xet
 
 
 
