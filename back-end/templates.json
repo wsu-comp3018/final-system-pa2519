@@ -3,9 +3,9 @@
         "model": "api.StatementTemplates",
         "pk": 1,
         "fields": {
-            "slug": "PLC",
-            "name": "public_liability_claimant",
-            "template_path": "templates/public_liability_claimant.txt"
+            "slug": "default",
+            "name": "default_template",
+            "template_path": "templates/default_template.txt"
         }
     }
 ]
