@@ -37,6 +37,10 @@
 
 <script setup>
 
+    useHead({
+        title: 'Login',
+    })
+
     const { $api } = useNuxtApp();
 
     const form = reactive({

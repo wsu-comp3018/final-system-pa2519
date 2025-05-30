@@ -37,8 +37,6 @@ class StatementTemplates(models.Model):
 
     def __str__(self):
         return self.name
-    # class Meta:
-    #     unique_together=('name','slug')
         
 class Sessions(models.Model):
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE)

@@ -23,6 +23,10 @@
         layout: 'logged-in'
     })
 
+    useHead({
+        title: 'Transcription',
+    })
+    
     const form = reactive({
         input: {
             client_fname: '',

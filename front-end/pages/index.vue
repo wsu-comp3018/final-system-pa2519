@@ -8,6 +8,10 @@
             }
         }
     })
+
+    useHead({
+        title: 'Statement Creation Tool',
+    })
 </script>
 
 <template>

@@ -32,6 +32,10 @@
 
 <script setup>
 
+    useHead({
+        title: 'Signup',
+    })
+
     const { $api } = useNuxtApp();
 
     const form = reactive({
@@ -135,6 +139,7 @@
 
 <template>
     
+
     <div class=" m-auto">
 
         <div class="w-[550px] bg-[#222222] rounded-xl">

@@ -45,6 +45,7 @@ This installs Django, Django REST Framework, CORS Headers, JWT Auth, Whisper, Sp
 Run Migrations and Server
 - python manage.py makemigrations
 - python manage.py migrate
+- python manage.py loaddata templates.json (this is to load the base template into database for statement generation)
 - python manage.py runserver
 
 **For further inquiries about how to use and setup pipenv please refer to the link**

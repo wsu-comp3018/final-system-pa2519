@@ -46,6 +46,10 @@
         layout: 'logged-in'
     })
 
+    useHead({
+        title: 'Account Settings',
+    })
+
     const form = reactive({
         email: '',
         current_password: '',

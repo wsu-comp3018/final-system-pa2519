@@ -3,6 +3,10 @@
         layout: 'logged-in'
     })
 
+    useHead({
+        title: 'Statement History',
+    })
+
     const items = ref([{
         session_title: 'sample',
     },

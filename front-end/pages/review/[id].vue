@@ -4,6 +4,10 @@
 
     })
 
+    useHead({
+        title: 'Review Statement',
+    })
+
     const { $api } = useNuxtApp();
     const route = useRoute();
     const statement_content = ref('');
@@ -20,7 +24,6 @@
         })
         .catch(async (error) => {
             await navigateTo('/transcription');
-            console.log(error);
         })
     }
     getStatement();
@@ -34,7 +37,6 @@
         } else {
             enable.value.contentEditable = 'false';
             iconColor.value = "black";
-            //console.log('guh', enable.value.innerText)
             saveChanges();
         }
 
@@ -47,7 +49,7 @@
             updated_statement: newStatement,
         }, {withCredentials: true}) 
         .then((response) => {
-            console.log(response);
+            return;
         })
         .catch((error) => {
             console.log(error);
@@ -60,7 +62,6 @@
             statement_id: id,
         }, {withCredentials: true})
         .then((response) => {
-            console.log(response)
             return navigateTo('/history')
         })
         .catch((error) => {
@@ -70,9 +71,7 @@
 
     const confirmPopup = ref(false);
     const showConfirmPopup = () => {
-        console.log('here')
         confirmPopup.value = true;
-        console.log(confirmPopup.value)
     }
 
     const confirmDelete = (answer) => {

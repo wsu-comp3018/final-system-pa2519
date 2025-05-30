@@ -8,8 +8,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 import whisper
 from summariser.views import summaryFunction
 from statement.views import generate_statement
-from rest_framework.permissions import IsAuthenticated
-# from .serializers import StatementTemplateSerializer
 from .forms import uploadTemplates
 
 from django.shortcuts import render, HttpResponse
@@ -215,9 +213,7 @@ def generateStatement(request):
         templateObj = StatementTemplates.objects.get(name = sessionObj.template_id)
 
         transcription = sessionObj.transcription.strip()
-        print('generating')
         text = generate_statement(transcription, templateObj.template_path.path)
-        print('finish generating')
 
         if text is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
