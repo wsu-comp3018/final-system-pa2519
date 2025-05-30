@@ -328,7 +328,7 @@
             intervalID = setInterval(() => {
                 chunkRecorder.stop();
                 chunkRecorder.start();
-            }, 4000);
+            }, 3000);
 
         } else {
             clearInterval(intervalID);

@@ -25,7 +25,7 @@ Built with **Nuxt.js** (Vue 3)
 - npm run dev
 
 # Back-End
-Install the latest version fo python using the link below
+Install the latest version fo python using the link
 https://www.python.org/
 
 Install pipenv
@@ -44,12 +44,12 @@ This installs Django, Django REST Framework, CORS Headers, JWT Auth, Whisper, Sp
 
 - You may be required to set your python interpretor to point to the virtual environment.
 
-**For further inquiries about how to use pipenv please refer to the link below**
-https://pipenv.pypa.io/en/latest/
-
 Run Migrations and Server
 - python manage.py migrate
 - python manage.py runserver
+
+**For further inquiries about how to use and setup pipenv please refer to the link**
+https://pipenv.pypa.io/en/latest/
 
 # Back-End (Individual Installs)
 If required, install each dependency individually with the following:
