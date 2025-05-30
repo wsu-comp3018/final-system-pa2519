@@ -110,8 +110,6 @@
         validate_Password();
         validate_ConfirmPass();
 
-        console.log(form.input.fname);
-
         if (form.error.fname !== "" || form.error.lname !== "" || form.error.email !== "" || form.error.password !== "" || form.error.confirm_pass !== "") {
             return;
         }
@@ -123,7 +121,6 @@
             password: form.input.password,
         }, {withCredentials: true})
         .then((response) => {
-            console.log(response);
             return navigateTo('/login');
         })
         .catch((error) => {
@@ -131,7 +128,6 @@
             setTimeout(() => {
                 createError.value = false;
             }, 3000);
-            console.log("Error: ", error);
         })
     }
     

@@ -52,7 +52,6 @@
     }
 
     const search = () => {
-        // at the beginning, check for filter if set, then filter array
         if (query.value !== '') {
             searchFilterList.value = [];
             listOfStatements.value.forEach( item => {

@@ -66,9 +66,7 @@
     const getAccountSettings = async () => {
         await $api.get('http://localhost:8000/api/get-usersettings', {withCredentials: true})
         .then((response) => {
-            console.log(response.data.user)
             userDetails.value = response.data.user;
-            console.log(userDetails.value)
         })
         .catch((error) => {
             console.log(error);

@@ -191,7 +191,7 @@ def getSummary(request):
         sessionObj = Sessions.objects.get(id=session_id, user_id_id=user)
         transcription = sessionObj.transcription.strip()
         text = summaryFunction(transcription)
-        if text is None: # if no transcription, it will stop execution
+        if text is None: 
             return Response(status=500)
         sessionObj.summary = text
         sessionObj.full_clean()
@@ -226,22 +226,6 @@ def generateStatement(request):
     except:
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-# @api_view(['POST'])
-# def generateStatement(request): user = request.user.id
-# sessionID = request.data['session_id']
-# try:
-# clientObj =Interviewees.objects.get(session_id=sessionID)
-# sessionObj=Sessions.objects.get(id=sessionID, user_id_id=user)
-# templateObj = Statement Templates.objects.get(name = sessionObj.template_id)
-# transcription=sessionObj.transcription.strip()
-# 
-# text = generate_statement(transcription, template0bj.template_path.path) 
-# if text is None:
-# return Response(status=status.HTTP_400_BAD_REQUEST)
-# statement = Statements (user_id_id=user, interviewee_id_id=clientObj.id, statement_content=text) statement.full_clean()
-# statement.save()
-# return Response({'statement_id': statement.id}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def getStatement(request):
@@ -320,7 +304,7 @@ def uploadRecording(request):
     
     return Response(status=status.HTTP_200_OK)
 
-# 
+
 @api_view(['POST'])
 def templateUpload(request):
 
@@ -348,12 +332,11 @@ def transcribe(request):
     blob = request.FILES['audio'] 
     tempAudioFile = 'chunk_audio.wav'
 
-    # write audio blob into a audio file
     with open(tempAudioFile, 'wb+') as destination:
         for chunk in blob.chunks():
             destination.write(chunk)
     
-    # whisper transcription process
+
     result = model.transcribe(tempAudioFile, condition_on_previous_text=False, word_timestamps=True, hallucination_silence_threshold=4, fp16=False, language="en")
 
     try:

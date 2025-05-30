@@ -422,7 +422,7 @@
             </div>
         </div>
 
-        <!-- Displays the transcriptions, summary and the functions under these panels -->
+        <!-- Displays the transcriptions, summary and the function bar -->
         <div v-if="currentSessionID == null " class="flex grow items-center text-center">
             <p class="grow">Create or select a session to get started.</p>
         </div>
@@ -493,7 +493,7 @@
         </div>
     </div>
 
-    <!-- A menu will pop up to allow users to upload templates (hidden for now) -->
+    <!-- Below are different popup menus when user clicks on certain parts of the page -->
     <div v-if="uploadTemplatePopup" class="absolute z-10 bg-[rgba(0,0,0,0.8)] text-white w-full h-dvh">
         <div class="p-5 bg-white text-black w-[300px] rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
             <Icon class="absolute right-0 top-0 mt-2 mr-2 cursor-pointer" size="20px" name="gridicons:cross" @click="toggleMenus('templates')"/>

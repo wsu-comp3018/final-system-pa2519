@@ -90,7 +90,6 @@
             password: form.input.password,
         }, {withCredentials: true})
         .then((response) => {
-            console.log(response)
             return navigateTo('/transcription')
         })
         .catch ((error) => {
@@ -98,7 +97,6 @@
             setTimeout(() => {
                 loginError.value = false;
             }, 3000);
-            console.log("Error occured: ", error)
         })
 
         
