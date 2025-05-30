@@ -20,7 +20,7 @@ Several install need to occur for the front-end and back-end. These are split in
 # Front-End Setup
 
 Built with **Nuxt.js** (Vue 3)
-- cd (change directory) into the front-end folder
+- cd front-end (change directory into the front-end folder)
 - npm install
 - npm run dev
 
@@ -32,19 +32,18 @@ Install pipenv
 - pip install pipenv (pip3 on mac)
 
 Activate Virtual Environment
-- cd (change directory) into the back-end folder
+- cd back-end (change directory into the back-end folder)
 
 for Windows and Mac:
-- pipenv shell (create or load virtual environment)
+- pipenv shell (will create or load virtual environment)
 
 Install dependencies and packages
 - pipenv install
 
 This installs Django, Django REST Framework, CORS Headers, JWT Auth, Whisper, Spark NLP + Pyspark, Transformers (with Torch), Argon2, Jinja2, Numpy and hf-xet
 
-- You may be required to set your python interpretor to point to the virtual environment.
-
 Run Migrations and Server
+- python manage.py makemigrations
 - python manage.py migrate
 - python manage.py runserver
 
