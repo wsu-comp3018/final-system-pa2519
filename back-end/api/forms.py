@@ -2,6 +2,5 @@ from django import forms
 from .models import StatementTemplates
 
 class uploadTemplates(forms.ModelForm):
-    class Meta:
-        model=StatementTemplates
-        fields=('template_path',)
+    file_name=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    files=forms.FileField(widget=forms.FileInput(attrs={'class':'form-control'}))

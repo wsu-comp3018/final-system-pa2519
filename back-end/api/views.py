@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 # from .serializers import StatementTemplateSerializer
 from .forms import uploadTemplates
 
+from django.shortcuts import render, HttpResponse
 
 
 ph = argon2.PasswordHasher()
@@ -298,20 +299,27 @@ def uploadRecording(request):
     
     return Response(status=status.HTTP_200_OK)
 
-
+# 
 @api_view(['POST'])
 def templateUpload(request):
-
+    # permission_classes = [IsAuthenticated]
+    # return HttpResponse("hello")
 
     if request.method=="POST":
         template=uploadTemplates(request.POST,request.FILES)
         if template.is_valid():
-            template.save()
+            name=template.cleaned_data['file_name']
+            files=template.cleaned_data['template_path']
+            StatementTemplates(file_name=name,template_path=files).save()
 
-            return Response({"message": "File Upload Successful!"},status=201)
-        return Response({"error": "Error! Problem in uploading!"}, status=400)
-    
+            return HttpResponse("File Uploaded Successfully!")
+        
+        else:
+            return HttpResponse("Error in File Uploading!")
 
+    context={
+        'form':uploadTemplates()
+    }
         
 
 @api_view(['POST'])
