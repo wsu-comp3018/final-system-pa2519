@@ -141,7 +141,7 @@ def getAccountSettings(request):
 def createSession(request):
     session_Name = request.data['session_name'].strip()
     user = request.user.id
-    sessionObj = Sessions(user_id_id=user, session_name=session_Name)
+    sessionObj = Sessions(user_id_id=user, session_name=session_Name, template_id_id = 1)
     try:
         checkSessionExist = Sessions.objects.get(user_id_id=user, session_name=session_Name) 
         return Response({'Error': 'Session name is not unique'}, status=status.HTTP_400_BAD_REQUEST)
@@ -299,7 +299,8 @@ def uploadRecording(request):
     
     return Response(status=status.HTTP_200_OK)
 
-# @api_view(['POST'])
+# 
+@api_view(['POST'])
 def templateUpload(request):
     # permission_classes = [IsAuthenticated]
     # return HttpResponse("hello")

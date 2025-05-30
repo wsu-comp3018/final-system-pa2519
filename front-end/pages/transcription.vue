@@ -177,7 +177,7 @@
             currentSessionID.value = null;
         })
         .catch((error) => {
-            errorMessage.value = "An error occur during generation."
+            errorMessage.value = "An error occur deleting statement."
             displayErrorMessage();
         })
     }
@@ -237,25 +237,17 @@
     }
 
     const fileError = ref("");
-    const selected = ref(null);
     const templateSubmit = () => {
         fileError.value = "";
 
-        if (!file.value && !selected.value) {
-            fileError.value = "Select one of the options."
-            return;
-        }
-
-        if (selected.value && file.value) {
-            fileError.value = "Only choose one option."
+        if (!file.value) {
+            fileError.value = "Upload a file to submit"
             return;
         }
         else {
             const formData = new FormData();
-            if (selected.value) {
-                formData.append('template', selected.value);
-            }
-            else if(file.value) {
+            formData.append('session_id', currentSessionID.value);
+            if(file.value) {
                 const file_name = file.value.name.split('.')[0];
                 formData.append('file_name', file_name);
                 formData.append('template', file.value);
@@ -263,12 +255,11 @@
 
             $api.post("http://localhost:8000/api/upload-template/", formData, {withCredentials: true})
             .then((response) => {
-                selected.value = null;
                 uploadTemplatePopup.value = false;
             })
             .catch((error) => {
                 uploadTemplatePopup.value = false;
-                errorMessage.value = "An error occur during generation."
+                errorMessage.value = "An error occur uploading the template."
                 displayErrorMessage();      
             })
         }
@@ -505,13 +496,6 @@
 
             <h1 class="text-[18px]">Upload a template or select one from the dropdown</h1>
             <form method="post" @submit.prevent="templateSubmit">
-                <select v-model="selected" class="m-0 bg-[#444343] text-white indent-3 py-2" name="template">
-                    <option disable value="default">Select a template</option>
-                    <option value="1">Public Liability</option>
-                    <option value="2">Workers Comp Claimant</option>
-                    <option value="3">Worker Comp Witness</option>
-                </select>
-                <p class="py-3">OR</p>
                 <input ref="fileInput" @change="getFile" type="file" name="template" id="template" class="hidden">
                 <button type="button" class="text-white bg-[#444343] w-full py-2 rounded-sm" @click="openFileInputWindow">Upload</button>
                 <span class="text-red-500">{{ fileError }}</span>
