@@ -50,39 +50,51 @@ Run Migrations and Server
 # Back-End (Individual Installs)
 If required, install each dependency individually with the following:
 **Django**
+
 pip install django
 
 **Django REST Framework**
+
 pip install djangorestframework
 
 **Django CORS Headers**
+
 pip install django-cors-headers
 
 **Simple JWT Authentication for DRF**
+
 pip install djangorestframework-simplejwt
 
 **Whisper**
-pip install 
+
+pip install -U openai-whisper
 
 **Spark NLP**
+
 pip install spark-nlp==5.5.3
 
 **PySpark**
+
 pip install pyspark
 
 **HuggingFace Transformers with Torch support**
+
 pip install "transformers[torch]"
 
 **Argon2 Password Hasher**
+
 pip install argon2-cffi
 
 **Jinja2 Template Engine**
+
 pip install jinja2
 
 **NumPy**
+
 pip install numpy
 
 **HuggingFace Xet (hf-xet)**
+
 pip install hf-xet
 
 
