@@ -227,21 +227,21 @@ def generateStatement(request):
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# @api_view(['POST'])
-# def generateStatement(request): user = request.user.id
-# sessionID = request.data['session_id']
-# try:
-# clientObj =Interviewees.objects.get(session_id=sessionID)
-# sessionObj=Sessions.objects.get(id=sessionID, user_id_id=user)
-# templateObj = Statement Templates.objects.get(name = sessionObj.template_id)
-# transcription=sessionObj.transcription.strip()
-# 
-# text = generate_statement(transcription, template0bj.template_path.path) 
-# if text is None:
-# return Response(status=status.HTTP_400_BAD_REQUEST)
-# statement = Statements (user_id_id=user, interviewee_id_id=clientObj.id, statement_content=text) statement.full_clean()
-# statement.save()
-# return Response({'statement_id': statement.id}, status=status.HTTP_200_OK)
+@api_view(['POST'])
+def generateStatement(request): user = request.user.id
+sessionID = request.data['session_id']
+try:
+clientObj =Interviewees.objects.get(session_id=sessionID)
+sessionObj=Sessions.objects.get(id=sessionID, user_id_id=user)
+templateObj = Statement Templates.objects.get(name = sessionObj.template_id)
+transcription=sessionObj.transcription.strip()
+
+text = generate_statement(transcription, template0bj.template_path.path) 
+if text is None:
+return Response(status=status.HTTP_400_BAD_REQUEST)
+statement = Statements (user_id_id=user, interviewee_id_id=clientObj.id, statement_content=text) statement.full_clean()
+statement.save()
+return Response({'statement_id': statement.id}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def getStatement(request):
