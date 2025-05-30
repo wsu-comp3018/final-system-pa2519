@@ -15,12 +15,16 @@ class Users(AbstractUser):
         (ROLE_LEGAL_TEAM, "Legal Team"),
     ]
 
+    username = None
     first_name = models.CharField(max_length=250)
     last_name = models.CharField(max_length=250)
-    email = models.CharField(max_length=250)
+    email = models.EmailField(unique=True, max_length=250)
     # INVESTIGATOR- Investigator, INSURER- Insurer, LEGAL TEAM - Legal Team
     role = models.CharField(choices=ROLE_CHOICES, default=ROLE_INVESTIGATOR, max_length=100)
     password = models.CharField(max_length=128)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
 class StatementTemplates(models.Model):
     slug = models.SlugField(unique=True, max_length=250,blank=True, null=True)

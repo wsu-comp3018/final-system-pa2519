@@ -207,7 +207,7 @@ def generateStatement(request):
     try:
         clientObj = Interviewees.objects.get(session_id=sessionID)
         sessionObj = Sessions.objects.get(id=sessionID, user_id_id=user)
-        templateObj = StatementTemplates.objects.get(id = 1)
+        templateObj = StatementTemplates.objects.get(name = sessionObj.template_id)
 
         transcription = sessionObj.transcription.strip()
         text = generate_statement(transcription, templateObj.template_path.path)
