@@ -14,6 +14,7 @@ Your system should have the following installed:
 - **pipenv**
 - **FFmpeg** (required for Whisper transcription)
 - **Git**
+
 Several install need to occur for the front-end and back-end. These are split into the following sections:
 
 # Front-End Setup
