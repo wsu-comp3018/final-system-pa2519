@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:10.11
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: django_db
+      MYSQL_USER: django_user
+      MYSQL_PASSWORD: django_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  django:
+    build:
+      context: ../back-end
+      dockerfile: ../docker/django.Dockerfile
+    container_name: django
+    restart: always
+    command: >
+      sh -c "pipenv run python manage.py migrate &&
+             pipenv run python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ../back-end:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=mariadb
+      - DB_NAME=django_db
+      - DB_USER=django_user
+      - DB_PASSWORD=django_password
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+      - DJANGO_DEBUG=True
+    depends_on:
+      - mariadb
+
+
+  nuxt:
+    build:
+      context: ../front-end
+      dockerfile: ../docker/nuxt.Dockerfile
+    container_name: nuxt
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../front-end:/app
+    environment:
+      - NUXT_PUBLIC_API_URL=http://django:8000
+    depends_on:
+      - django
+
+
+volumes:
+  mariadb_data:
