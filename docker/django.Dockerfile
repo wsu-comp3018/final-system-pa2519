@@ -14,9 +14,11 @@ RUN apt-get update && \
 
 RUN pip install pipenv
 
+RUN pip install git+https://github.com/openai/whisper.git@dd985ac4b90cafeef8712f2998d62c59c3e62d22
+
 COPY Pipfile ./
 
-RUN pipenv install --deploy --ignore-pipfile
+RUN pipenv install --deploy
 
 COPY . .
 RUN pipenv run python manage.py makemigrations
