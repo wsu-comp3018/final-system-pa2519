@@ -6,6 +6,7 @@ WORKDIR /app
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         ffmpeg \
+        git \
         gcc \
         libmariadb-dev-compat \
         libmariadb-dev \
@@ -18,7 +19,8 @@ COPY Pipfile Pipfile.lock* ./
 RUN pipenv install --deploy --ignore-pipfile
 
 COPY . .
-
+RUN pipenv run python manage.py makemigrations
+RUN pipenv run python manage.py migrate
 RUN pipenv run python manage.py collectstatic --noinput
 
 EXPOSE 8000

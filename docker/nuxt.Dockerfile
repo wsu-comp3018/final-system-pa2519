@@ -1,3 +1,4 @@
+# Build Stage
 FROM node:20 as build-stage
 
 WORKDIR /app
@@ -7,18 +8,20 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
+# Generate static site
+RUN npm run generate
 
-# Production image
-FROM node:20-slim
+# Production Stage - use nginx to serve static files
+FROM nginx:alpine
 
-WORKDIR /app
+# Remove default nginx static assets
+RUN rm -rf /usr/share/nginx/html/*
 
-COPY --from=build-stage /app/.output .output
-COPY --from=build-stage /app/package.json package.json
-RUN npm install --only=production
+# Copy generated static site to nginx public folder
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 
-EXPOSE 3000
+# Expose port 80
+EXPOSE 80
 
-# Start the production Nuxt app
-CMD ["node", ".output/server/index.mjs"]
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]

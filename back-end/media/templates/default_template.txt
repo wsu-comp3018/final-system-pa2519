@@ -21,7 +21,7 @@ This statement made by me accurately sets out the evidence which I would be prep
 
 By providing this statement to {{ client }}, I acknowledge and consent to {{ client }} handling my personal information under its Privacy Statement.  I have been provided with a copy of that Privacy Statement today.    
 
-I understand that the personal information I provide to {{ client}} may be disclosed to other parties in line with that Privacy Statement, such as other people connected with this claim, other insurers and potentially the police. 
+I understand that the personal information I provide to {{ client }} may be disclosed to other parties in line with that Privacy Statement, such as other people connected with this claim, other insurers and potentially the police. 
 
 I have been advised that {{ name }} has instigated a liability insurance claim in respect of an incident which occurred at {{ company_name }} on {{ injury_date }}. 
 

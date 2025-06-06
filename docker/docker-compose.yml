@@ -46,11 +46,7 @@ services:
     container_name: nuxt
     restart: always
     ports:
-      - "3000:3000"
-    volumes:
-      - ../front-end:/app
-    environment:
-      - NUXT_PUBLIC_API_URL=http://django:8000
+      - "3000:80"
     depends_on:
       - django
 
