@@ -21,22 +21,22 @@ services:
       dockerfile: ../docker/django.Dockerfile
     container_name: django
     restart: always
-    command: >
-      sh -c "pipenv run python manage.py migrate &&
-             pipenv run python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ../back-end:/app
     ports:
       - "8000:8000"
+    expose:
+      - "8000"
     environment:
       - DB_HOST=mariadb
       - DB_NAME=django_db
       - DB_USER=django_user
       - DB_PASSWORD=django_password
-      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
-      - DJANGO_DEBUG=True
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1] django
+      - DJANGO_DEBUG=False
     depends_on:
       - mariadb
+    entrypoint: ["/app/entrypoint.sh"]
 
 
   nuxt:

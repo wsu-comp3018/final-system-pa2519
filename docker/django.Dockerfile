@@ -8,21 +8,22 @@ RUN apt-get update && \
         ffmpeg \
         git \
         gcc \
+        netcat-openbsd \ 
+        pkg-config \ 
         libmariadb-dev-compat \
         libmariadb-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN pip install pipenv
 
-RUN pip install git+https://github.com/openai/whisper.git@dd985ac4b90cafeef8712f2998d62c59c3e62d22
+COPY Pipfile Pipfile.lock* ./
 
-COPY Pipfile ./
-
-RUN pipenv install --deploy
+RUN pipenv install --deploy --ignore-pipfile
 
 COPY . .
-RUN pipenv run python manage.py makemigrations
-RUN pipenv run python manage.py migrate
+
+RUN chmod +x /app/entrypoint.sh
+
 RUN pipenv run python manage.py collectstatic --noinput
 
 EXPOSE 8000
