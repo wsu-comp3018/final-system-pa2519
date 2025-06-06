@@ -6,6 +6,7 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm install
 
+ARG CACHEBUST=0
 COPY . .
 
 # Generate static site

@@ -16,6 +16,7 @@ numpy = "*"
 transformers = {extras = ["torch"], version = "*"}
 hf-xet = "*"
 jinja2 = "*"
+mysqlclient = "*"
 
 [dev-packages]
 

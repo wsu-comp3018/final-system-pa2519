@@ -14,7 +14,7 @@ RUN apt-get update && \
 
 RUN pip install pipenv
 
-COPY Pipfile Pipfile.lock* ./
+COPY Pipfile ./
 
 RUN pipenv install --deploy --ignore-pipfile
 
