@@ -22,11 +22,6 @@
 
         $api.post('http://localhost:8000/api/logout/', {withCredentials: true})
         .then((response) => {
-            const token = useCookie('api_token');
-            const refresh = useCookie('refresh_token');
-            token.value = null;
-            refresh.value = null;
-            return navigateTo('/login')
         })
         .catch((error) => {
             // logoutFailed.value = true;
