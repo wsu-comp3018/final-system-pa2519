@@ -143,12 +143,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  # ✅ Yes, still 'mysql'
-        'NAME': os.getenv('DB_NAME', 'django_db'),  # Your database name
-        'USER': os.getenv('DB_USER', 'django_user'),  # Your database user
-        'PASSWORD': os.getenv('DB_PASSWORD', 'django_password'),  # Your database password
-        'HOST': os.getenv('DB_HOST', 'mariadb'),  # The service name in docker-compose
-        'PORT': '3306',  # Default MariaDB port
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('DB_NAME', 'django_db'),
+        'USER': os.getenv('DB_USER', 'django_user'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'django_password'),
+        'HOST': os.getenv('DB_HOST', 'mariadb'),
+        'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
         },
